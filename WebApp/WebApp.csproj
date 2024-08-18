@@ -6,6 +6,8 @@
     <RootNamespace>Albstones.WebApp</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="CoordinateSharp" Version="2.24.2.1" />
+    <PackageReference Include="dotnetstandard-bip39" Version="1.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 </Project>
