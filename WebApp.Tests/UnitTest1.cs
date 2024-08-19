@@ -14,14 +14,14 @@ namespace WebApp.Tests
             Coordinate coordinate = new Coordinate(48.3553639, 8.9680407, dob);
 
             // Act
-            string[] wordlist = Magic.Wordlist(name, coordinate);
-            string fingerprint = Magic.Fingerprint(wordlist);
+            string[] mnemonic = Magic.Mnemonic(name, coordinate);
+            string entropy = Magic.Entropy(mnemonic);
             string zodiac = coordinate.CelestialInfo.AstrologicalSigns.ZodiacSign.ToString();
 
             // Assert
             Assert.Equal("Capricorn", zodiac);
             Assert.Equal(@"N 48º 21' 19,31"" E 8º 58' 4,947""", coordinate.ToString());
-            Assert.Equal("6820024aded7023f4004f5b02e047ecc", fingerprint);
+            Assert.Equal("6820024aded7023f4004f5b02e047ecc", entropy);
         }
 
         [Fact]
@@ -33,14 +33,14 @@ namespace WebApp.Tests
             Coordinate coordinate = new Coordinate(48.214091, 9.0190494, dob);
 
             // Act
-            string[] wordlist = Magic.Wordlist(name, coordinate);
-            string fingerprint = Magic.Fingerprint(wordlist);
+            string[] mnemonic = Magic.Mnemonic(name, coordinate);
+            string entropy = Magic.Entropy(mnemonic);
             string zodiac = coordinate.CelestialInfo.AstrologicalSigns.ZodiacSign.ToString();
 
             // Assert
             Assert.Equal("Taurus", zodiac);
             Assert.Equal(@"N 48º 12' 50,728"" E 9º 1' 8,578""", coordinate.ToString());
-            Assert.Equal("7c1d807e800dce003b0581ec17b4003e", fingerprint);
+            Assert.Equal("7c1d807e800dce003b0581ec17b4003e", entropy);
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace WebApp.Tests
             Coordinate coord = new Coordinate(0.0, 0.0, dob);
 
             // Act
-            string[] wordlist = Magic.Wordlist(name, coord);
+            string[] wordlist = Magic.Mnemonic(name, coord);
             string mnemonic = string.Join(' ', wordlist);
 
             // Assert

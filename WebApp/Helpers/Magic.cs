@@ -6,23 +6,18 @@ namespace Albstones.WebApp.Helpers
 {
     public static class Magic
     {
-        public static string Fingerprint(string[] word)
+        public static string Entropy(string[] word)
         {
             if (null == word) throw new ArgumentException("empty word list, can't get fingerprint");
 
             if (word.Count() != 12) throw new ArgumentException("need 12 words, can't get fingerprint");
 
-            string fingerprint = string.Empty;
-
             var bip39 = new BIP39();
             string mnemonic = string.Join(" ", word);
-            var entropyResult = bip39.MnemonicToEntropy(mnemonic, BIP39Wordlist.English);
-            fingerprint = entropyResult.ToString();
-
-            return fingerprint;
+            return bip39.MnemonicToEntropy(mnemonic, BIP39Wordlist.English);
         }
 
-        public static string[] Wordlist(string name, Coordinate coordinate)
+        public static string[] Mnemonic(string name, Coordinate coordinate)
         {
             string[] word = new string[12];
             string magic = name + coordinate.CelestialInfo.AstrologicalSigns.ZodiacSign + "Albstones"; 
@@ -45,9 +40,9 @@ namespace Albstones.WebApp.Helpers
             repeat:
             try
             {
-                var bip39 = new BIP39();
+                BIP39 bip39 = new BIP39();
                 string mnemonic = string.Join(" ", word);
-                var entropyResult = bip39.MnemonicToEntropy(mnemonic, BIP39Wordlist.English);
+                string entropy = bip39.MnemonicToEntropy(mnemonic, BIP39Wordlist.English);
             }
             catch (Exception)
             {
