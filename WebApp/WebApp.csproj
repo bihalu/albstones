@@ -9,5 +9,6 @@
     <PackageReference Include="CoordinateSharp" Version="2.24.2.1" />
     <PackageReference Include="dotnetstandard-bip39" Version="1.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 </Project>
