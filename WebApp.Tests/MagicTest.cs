@@ -6,7 +6,7 @@ namespace WebApp.Tests
     public class MagicTest
     {
         [Fact]
-        public void EntropyHansi9172()
+        public void MnemonicHansi9172()
         {
             // Arrange
             string name = "Hansi";
@@ -21,18 +21,18 @@ namespace WebApp.Tests
 
             // Act
             string[] mnemonic = Magic.Mnemonic(name, coordinate);
-            string entropy = Magic.Entropy(mnemonic);
+            string words = string.Join(' ', mnemonic);
             string zodiac = coordinate.CelestialInfo.AstrologicalSigns.ZodiacSign.ToString();
 
             // Assert
             Assert.Equal("Capricorn", zodiac);
             Assert.Equal(@"N 48º 21' 19,31"" E 8º 58' 4,947""", coordinate.ToString());
             Assert.Equal("48,3553639 8,9680407", coordinate.ToString(decimal7));
-            Assert.Equal("6820024aded7023f4004f5b02e047ecc", entropy);
+            Assert.Equal("habit abandon naive sad ice cabbage abandon pact rabbit ice cabbage observe", words);
         }
 
         [Fact]
-        public void EntropyLuca854()
+        public void MnemonicLuca854()
         {
             // Arrange
             string name = "Luca";
@@ -47,14 +47,14 @@ namespace WebApp.Tests
 
             // Act
             string[] mnemonic = Magic.Mnemonic(name, coordinate);
-            string entropy = Magic.Entropy(mnemonic);
+            string words = string.Join(' ', mnemonic);
             string zodiac = coordinate.CelestialInfo.AstrologicalSigns.ZodiacSign.ToString();
 
             // Assert
             Assert.Equal("Taurus", zodiac);
             Assert.Equal(@"N 48º 12' 50,728"" E 9º 1' 8,578""", coordinate.ToString());
             Assert.Equal("48,214091 9,0190494", coordinate.ToString(decimal7));
-            Assert.Equal("7c1d807e800dce003b0581ec17b4003e", entropy);
+            Assert.Equal("lab ugly cabbage abandon table abandon ugly rabbit ugly sad abandon lab", words);
         }
 
         [Fact]
@@ -74,6 +74,19 @@ namespace WebApp.Tests
         }
 
         [Fact]
+        public void SeedHexFromMnemonic()
+        {
+            // Arrange
+            string words = "machine naive eager machine oak naive ice cabbage lab eager oak abuse";
+
+            // Act
+            string seedHex = Magic.SeedHex(words.Split(' '));
+
+            // Assert
+            Assert.Equal("9ab8459549177e9458fbe3a70446f76dd3857379b1e289653c58ed8065d6d68b20c4061722def81bcc4a4dcd33974cc318a2dac0198faf89874c9544de3cd313", seedHex);
+        }
+
+        [Fact]
         public void MnemonicFromEntropy()
         {
             // Arrange
@@ -85,19 +98,6 @@ namespace WebApp.Tests
 
             // Assert
             Assert.Equal("machine naive eager machine oak naive ice cabbage lab eager oak abuse", mnemonic);
-        }
-
-        [Fact]
-        public void EntropyFromMnemonic()
-        {
-            // Arrange
-            string words = "machine naive eager machine oak naive ice cabbage lab eager oak abuse";
-
-            // Act
-            string entropy = Magic.Entropy(words.Split(' '));
-
-            // Assert
-            Assert.Equal("85925513c2c97d255c08fd7c089e5f00", entropy);
         }
     }
 }
