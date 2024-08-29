@@ -87,6 +87,45 @@ namespace WebApp.Tests
         }
 
         [Fact]
+        public void RootKeyFromSeed()
+        {
+            // Arrange
+            string seed = "9ab8459549177e9458fbe3a70446f76dd3857379b1e289653c58ed8065d6d68b20c4061722def81bcc4a4dcd33974cc318a2dac0198faf89874c9544de3cd313";
+
+            // Act
+            string rootKey = Magic.RootKey(seed);
+
+            // Assert
+            Assert.Equal("xprv9s21ZrQH143K41pGUKurFpCEZJbA26HjZ2DEfTsVJReMDMbeP4bcTiFeL8WWYkHY1zmkcy4hMjXVQtcAseGGKHdn52YstaYu8teP2jSyAvy", rootKey);
+        }
+
+        [Fact]
+        public void PubKeyFromSeed()
+        {
+            // Arrange
+            string seed = "9ab8459549177e9458fbe3a70446f76dd3857379b1e289653c58ed8065d6d68b20c4061722def81bcc4a4dcd33974cc318a2dac0198faf89874c9544de3cd313";
+
+            // Act
+            string pubKey = Magic.PubKey(seed);
+
+            // Assert
+            Assert.Equal("xpub6DK4U3tLvYdkAARF1NDDecviRdkBTrNCmbcyvPoF1Jk9FfR6GvhCw8aMCWt5iCefYHH5D1GEaRLU9Q8d8pdYPuJ47TfNYb6up7akBvCS2QW", pubKey);
+        }
+
+        [Fact]
+        public void RootKeyFromMnemonic()
+        {
+            // Arrange
+            string words = "machine naive eager machine oak naive ice cabbage lab eager oak abuse";
+
+            // Act
+            string rootKey = Magic.RootKey(words.Split(' '));
+
+            // Assert
+            Assert.Equal("xprv9s21ZrQH143K41pGUKurFpCEZJbA26HjZ2DEfTsVJReMDMbeP4bcTiFeL8WWYkHY1zmkcy4hMjXVQtcAseGGKHdn52YstaYu8teP2jSyAvy", rootKey);
+        }
+
+        [Fact]
         public void MnemonicFromEntropy()
         {
             // Arrange

@@ -1,6 +1,7 @@
 ﻿using CoordinateSharp;
 using NBitcoin;
 using NBitcoin.DataEncoders;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Albstones.WebApp.Helpers
 {
@@ -8,14 +9,42 @@ namespace Albstones.WebApp.Helpers
     {
         public static string SeedHex(string[] word, string password = "")
         {
-            if (null == word) throw new ArgumentException("empty word list, can't get entropy");
+            if (null == word) throw new ArgumentException("empty word list");
 
-            if (word.Count() != 12) throw new ArgumentException("need 12 words, can't get entropy");
+            if (word.Count() != 12) throw new ArgumentException("need 12 words");
 
             var mnemonic = new Mnemonic(string.Join(' ', word), Wordlist.English);
+
             return Encoders.Hex.EncodeData(mnemonic.DeriveSeed(password));
         }
 
+        public static string RootKey(string seedHex)
+        {
+            var seed = Encoders.Hex.DecodeData(seedHex);
+            ExtKey key = ExtKey.CreateFromSeed(seed);
+
+            return key.GetWif(Network.Main).ToString();
+        }
+
+        public static string PubKey(string seedHex)
+        {
+            var seed = Encoders.Hex.DecodeData(seedHex);
+            ExtKey key = ExtKey.CreateFromSeed(seed);
+            ExtPubKey pubkey = key.Neuter();
+
+            return pubkey.GetWif(Network.Main).ToString();
+        }
+
+        public static string RootKey(string[] word, string password = "")
+        {
+            if (null == word) throw new ArgumentException("empty word list");
+
+            if (word.Count() != 12) throw new ArgumentException("need 12 words");
+
+            var mnemonic = new Mnemonic(string.Join(' ', word), Wordlist.English);
+
+            return mnemonic.DeriveExtKey(password).ToString(Network.Main);
+        }
 
         public static string[] Mnemonic(string name, Coordinate coordinate)
         {
