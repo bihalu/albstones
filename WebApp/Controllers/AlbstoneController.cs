@@ -1,4 +1,6 @@
-﻿using Albstones.WebApp.Models;
+﻿using Albstones.WebApp.Data;
+using Albstones.WebApp.Models;
+using CoordinateSharp;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Albstones.WebApp.Controllers
@@ -7,83 +9,50 @@ namespace Albstones.WebApp.Controllers
     [ApiController]
     public class AlbstoneController : ControllerBase
     {
+        private AlbstoneRepository repository = new AlbstoneRepository();
+
         // GET: api/albstones?page=1&page_size=9
         [HttpGet()]
-        public /*IActionResult*/ IEnumerable<Albstone> Get([FromQuery(Name = "page")] int page = 1, [FromQuery(Name = "page_size")] int pageSize = 9)
+        public IEnumerable<Albstone> Get([FromQuery(Name = "page")] int page = 1, [FromQuery(Name = "page_size")] int pageSize = 9)
         {
-            var albstones = new List<Albstone>()
-            {
-                {
-                    new Albstone()
-                    {
-                    Address = "Address1",
-                    Name = "Name1",
-                    Date = new DateTime(1972, 01, 09, 08, 00, 00),
-                    Latitude = 48.3553639,
-                    Longitude = 8.9680407,
-                    Message = "Message1",
-                    Image = "Image1"
-                    }
-                },
-                {
-                    new Albstone()
-                    {
-                    Address = "Address2",
-                    Name = "Name2",
-                    Date = new DateTime(1972, 01, 09, 08, 00, 00),
-                    Latitude = 48.3553639,
-                    Longitude = 8.9680407,
-                    Message = "Message2",
-                    Image = "Image2"
-                    }
-                }
-            };
-
-            return albstones;
+            return repository.GetAlbstones();
         }
 
-        // GET api/albstones/hugo?page=1&page_size=9
+        // GET api/albstones/search?page=1&page_size=9
         [HttpGet("{search}")]
-        public /*IActionResult*/ IEnumerable<Albstone> Get(string search, [FromQuery(Name = "page")] int page = 1, [FromQuery(Name = "page_size")] int pageSize = 9)
+        public IEnumerable<Albstone> Get(string search, [FromQuery(Name = "page")] int page = 1, [FromQuery(Name = "page_size")] int pageSize = 9)
         {
+            var albstones = new List<Albstone>();
 
-            // search start with bc => search for address
-
-            // search starts with digit => search for location
-
-            // search starts with character => search for name
-
-            // search starts with * => search for name like
-
-            var albstones = new List<Albstone>()
+            // search nothing
+            if (string.IsNullOrWhiteSpace(search))
             {
-                {
-                    new Albstone()
-                    {
-                    Address = "Address1",
-                    Name = "Name1",
-                    Date = new DateTime(1972, 01, 09, 08, 00, 00),
-                    Latitude = 48.3553639,
-                    Longitude = 8.9680407,
-                    Message = "Message1",
-                    Image = "Image1"
-                    }
-                },
-                {
-                    new Albstone()
-                    {
-                    Address = "Address2",
-                    Name = "Name2",
-                    Date = new DateTime(1972, 01, 09, 08, 00, 00),
-                    Latitude = 48.3553639,
-                    Longitude = 8.9680407,
-                    Message = "Message2",
-                    Image = "Image2"
-                    }
-                }
-            };
+                return albstones;
+            }
 
-            return albstones;
+            // search for address
+            if (search.StartsWith("bc"))
+            {
+                var albstone = repository.GetAlbstoneByAddress(search);
+                if (albstone == null)
+                {
+                    return albstones;
+                }
+                else
+                {
+                    albstones.Add(albstone);
+                    return albstones;
+                }
+            }
+
+            // search for location
+            if (Coordinate.TryParse(search, out Coordinate coordinate))
+            {
+                return repository.GetAlbstonesByLocation(coordinate.Latitude.ToDouble(), coordinate.Longitude.ToDouble());
+            }
+
+            // search for name
+            return repository.GetAlbstonesByName(search);
         }
     }
 }

@@ -6,6 +6,7 @@
     <RootNamespace>Albstones.WebApp</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="35.6.0" />
     <PackageReference Include="CoordinateSharp" Version="2.24.2.1" />
     <PackageReference Include="NBitcoin" Version="7.0.37" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />

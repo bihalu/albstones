@@ -1,7 +1,7 @@
-﻿using CoordinateSharp;
+﻿using System.Text.RegularExpressions;
+using CoordinateSharp;
 using NBitcoin;
 using NBitcoin.DataEncoders;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Albstones.WebApp.Helpers
 {
@@ -9,10 +9,6 @@ namespace Albstones.WebApp.Helpers
     {
         public static string SeedHex(string[] word, string password = "")
         {
-            if (null == word) throw new ArgumentException("empty word list");
-
-            if (word.Count() != 12) throw new ArgumentException("need 12 words");
-
             var mnemonic = new Mnemonic(string.Join(' ', word), Wordlist.English);
 
             return Encoders.Hex.EncodeData(mnemonic.DeriveSeed(password));
@@ -26,21 +22,21 @@ namespace Albstones.WebApp.Helpers
             return key.GetWif(Network.Main).ToString();
         }
 
-        public static string PubKey(string seedHex)
+        public static string Address(string seedHex, int index = 0)
         {
             var seed = Encoders.Hex.DecodeData(seedHex);
-            ExtKey key = ExtKey.CreateFromSeed(seed);
-            ExtPubKey pubkey = key.Neuter();
+            ExtKey rootKey = ExtKey.CreateFromSeed(seed);
 
-            return pubkey.GetWif(Network.Main).ToString();
+            var keyPath = KeyPath.Parse("44'/0'/0'/" + index);
+
+            var extPrivKey = rootKey.Derive(keyPath).GetWif(Network.Main);
+            var address = rootKey.Derive(keyPath).GetPublicKey().GetAddress(ScriptPubKeyType.Segwit, Network.Main);
+
+            return address.ToString();
         }
 
         public static string RootKey(string[] word, string password = "")
         {
-            if (null == word) throw new ArgumentException("empty word list");
-
-            if (word.Count() != 12) throw new ArgumentException("need 12 words");
-
             var mnemonic = new Mnemonic(string.Join(' ', word), Wordlist.English);
 
             return mnemonic.DeriveExtKey(password).ToString(Network.Main);
@@ -51,6 +47,8 @@ namespace Albstones.WebApp.Helpers
             string[] word = new string[12];
             string magic = name + coordinate.CelestialInfo.AstrologicalSigns.ZodiacSign + "Albstones";
             magic = magic.ToLower();
+            magic = magic.Replace("x", ""); // English word list contains no word with x
+            magic = Regex.Replace(magic, @"[^\u0000-\u007F]+", string.Empty); // Remove none ascii characters
 
             var wordlist = Wordlist.English.GetWords().ToArray();
 
@@ -75,7 +73,6 @@ namespace Albstones.WebApp.Helpers
 
         public static string[] Mnemonic(string entropy)
         {
-
             var entropyBytes = Encoders.Hex.DecodeData(entropy);
             var mnemonic = new Mnemonic(Wordlist.English, entropyBytes);
 

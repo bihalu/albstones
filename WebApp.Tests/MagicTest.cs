@@ -3,6 +3,7 @@ using CoordinateSharp;
 
 namespace WebApp.Tests
 {
+    // https://iancoleman.io/bip39/
     public class MagicTest
     {
         [Fact]
@@ -100,16 +101,28 @@ namespace WebApp.Tests
         }
 
         [Fact]
-        public void PubKeyFromSeed()
+        public void AddressFromSeed()
         {
             // Arrange
             string seed = "9ab8459549177e9458fbe3a70446f76dd3857379b1e289653c58ed8065d6d68b20c4061722def81bcc4a4dcd33974cc318a2dac0198faf89874c9544de3cd313";
 
             // Act
-            string pubKey = Magic.PubKey(seed);
+            string address0 = Magic.Address(seed, 0);
+            string address1 = Magic.Address(seed, 1);
+            string address2 = Magic.Address(seed, 2);
+            string address9 = Magic.Address(seed, 9);
 
             // Assert
-            Assert.Equal("xpub6DK4U3tLvYdkAARF1NDDecviRdkBTrNCmbcyvPoF1Jk9FfR6GvhCw8aMCWt5iCefYHH5D1GEaRLU9Q8d8pdYPuJ47TfNYb6up7akBvCS2QW", pubKey);
+            Assert.Equal("bc1q08xg063864v5xw6tuctkmleap9elf7hua6q6km", address0);
+            Assert.Equal("bc1qjg3ljnn9jalhldc29wnykwj39u4kxlcuwnjff4", address1);
+            Assert.Equal("bc1qxd74qn44d0gqv8xztny3ryy4st2zdrmw2xzd4t", address2);
+            Assert.Equal("bc1qgj9u5gsa38ys2vfcznjt2gk4ejdscln6333vew", address9);
+
+            // Legacy address format
+            //Assert.Equal("1C71nGawDn8gsav7CczSDunj9CydsY1Qn9", address0);
+            //Assert.Equal("1EKikWqDGugweU9PVdBfApyeFR3j6ZyBcQ", address1);
+            //Assert.Equal("15hFajTFFjNHynN8Qr7BhXFK1Lb37ELgMf", address2);
+            //Assert.Equal("17FSQo7JFcTZ8aUiHnhniM1eVhfNfU8wbB", address9);
         }
 
         [Fact]
