@@ -1,15 +1,17 @@
 ﻿using CoordinateSharp;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace Albstones.WebApp.Models
 {
+    [PrimaryKey(nameof(Address), nameof(Date))]
     public class Albstone
     {
         public string Address { get; set; }
 
-        public string Name { get; set; }
-
         public DateTime Date { get; set; }
+
+        public string Name { get; set; }
 
         public Double Latitude { get; set; }
 
@@ -45,6 +47,15 @@ namespace Albstones.WebApp.Models
             }
 
             return albstone;
+        }
+
+        public static string DefaultImage()
+        {
+            using var stream = typeof(Program).Assembly.GetManifestResourceStream("Albstones.WebApp.wwwroot.default.png")!;
+            var bytes = new Byte[(int)stream.Length];
+            stream.Seek(0, SeekOrigin.Begin);
+            stream.Read(bytes, 0, (int)stream.Length);
+            return Convert.ToBase64String(bytes);
         }
     }
 }

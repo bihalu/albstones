@@ -8,8 +8,8 @@ namespace Albstones.WebApp.Data
 
         IEnumerable<Albstone> GetAlbstonesByName(string name);
 
-        IEnumerable<Albstone> GetAlbstonesByLocation(Double Latitude, Double Longitude);
+        IEnumerable<Albstone> GetAlbstonesByLocation(Double Latitude, Double Longitude, int radius);
 
-        Albstone? GetAlbstoneByAddress(string address);
+        IEnumerable<Albstone> GetAlbstonesByAddress(string address);
     }
 }

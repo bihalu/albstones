@@ -9,7 +9,12 @@ namespace Albstones.WebApp.Controllers
     [ApiController]
     public class AlbstoneController : ControllerBase
     {
-        private AlbstoneRepository repository = new AlbstoneRepository();
+        private AlbstoneRepository repository;
+
+        public AlbstoneController(AlbstoneRepository repository)
+        {
+            this.repository = repository;
+        }
 
         // GET: api/albstones?page=1&page_size=9
         [HttpGet()]
@@ -33,16 +38,7 @@ namespace Albstones.WebApp.Controllers
             // search for address
             if (search.StartsWith("bc"))
             {
-                var albstone = repository.GetAlbstoneByAddress(search);
-                if (albstone == null)
-                {
-                    return albstones;
-                }
-                else
-                {
-                    albstones.Add(albstone);
-                    return albstones;
-                }
+                return repository.GetAlbstonesByAddress(search);
             }
 
             // search for location

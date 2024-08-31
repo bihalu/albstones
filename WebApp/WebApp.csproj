@@ -11,5 +11,7 @@
     <PackageReference Include="NBitcoin" Version="7.0.37" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0-preview.7.24405.3" />
+    <EmbeddedResource Include="wwwroot\default.png" />
   </ItemGroup>
 </Project>

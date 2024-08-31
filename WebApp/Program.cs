@@ -1,17 +1,29 @@
-﻿namespace Albstones.WebApp;
+﻿using Albstones.WebApp.Data;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+
+namespace Albstones.WebApp;
 
 class Program
 {
     static void Main(string[] args)
     {
+        // in memory sqlite database
+        var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddRazorPages();
+        builder.Services.AddDbContext<AlbstoneDbContext>(d => d.UseSqlite(connection));
+        builder.Services.AddTransient<AlbstoneRepository>();
 
         var app = builder.Build();
+
+        AlbstoneRepository.AddAlbstoneData(app);
 
         if (app.Environment.IsDevelopment())
         {
