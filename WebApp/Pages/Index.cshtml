@@ -7,13 +7,4 @@
 <div class="text-center">
     <h1 class="display-4">Albstones</h1>
     <p>Die Geschichte der Albstones</p>
-
-  @foreach (var albstone in Model.Albstones)
-  {
-    <p>Name: @albstone.Name</p>
-    <p>Geburtsdatum: @albstone.Date</p>
-    <p>Adresse: @albstone.Address</p>
-    <img id="@albstone.Address" src="data:image/png;base64, @albstone.Image" alt="@albstone.Name" />
-  }
-
 </div>

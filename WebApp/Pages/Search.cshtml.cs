@@ -1,12 +1,36 @@
+﻿using Albstones.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 
 namespace Albstones.WebApp.Pages
 {
     public class SearchModel : PageModel
     {
-        public void OnGet()
+        private readonly ILogger<IndexModel> _logger;
+
+        [ViewData]
+        public List<Albstone> Albstones { get; set; }
+
+        public SearchModel(ILogger<IndexModel> logger)
         {
+            _logger = logger;
+        }
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            var baseUri = $"{Request.Scheme}://{Request.Host}";
+
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync(baseUri + "/api/albstones?Page=1&PageSize=9"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    Albstones = JsonConvert.DeserializeObject<List<Albstone>>(apiResponse);
+                }
+            }
+
+            return Page();
         }
     }
 }

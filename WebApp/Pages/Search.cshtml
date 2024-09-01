@@ -6,4 +6,13 @@
 
 <h1>@ViewData["Title"]</h1>
 
+
 <p>Suche</p>
+
+@foreach (var albstone in Model.Albstones)
+{
+  <p>Name: @albstone.Name</p>
+  <p>Geburtsdatum: @albstone.Date</p>
+  <p>Adresse: @albstone.Address</p>
+  <img id="@albstone.Address" src="data:image/png;base64, @albstone.Image" alt="@albstone.Name" />
+}
