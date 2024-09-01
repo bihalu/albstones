@@ -15,19 +15,24 @@ namespace Albstones.WebApp.Data
             this.context = context;
         }
 
-        public IEnumerable<Albstone> GetAlbstonesByAddress(string address)
+        public IEnumerable<Albstone> GetAlbstonesByAddress(string address, int page, int pageSize)
         {
-            return context.Albstones.Where(a => a.Address == address);
+            var query = context.Albstones.Where(a => a.Address == address);
+
+            return query.Skip((page - 1) * pageSize).Take(pageSize);
         }
 
-        public IEnumerable<Albstone> GetAlbstones()
+        public IEnumerable<Albstone> GetAlbstones(int page, int pageSize)
         {
             // get only the first albstone for each address, use good old SQL ;-)
-            return context.Albstones.FromSql($"SELECT Address, Name, MIN(Date) AS Date, Latitude, Longitude, Message, Image FROM Albstones GROUP BY Address, Name, Latitude, Longitude, Message, Image HAVING Date = MIN(Date)").ToList();
+            var query = context.Albstones.FromSql($"SELECT Address, Name, MIN(Date) AS Date, Latitude, Longitude, Message, Image FROM Albstones GROUP BY Address, Name, Latitude, Longitude, Message, Image HAVING Date = MIN(Date)");
+
+            return query.Skip((page - 1) * pageSize).Take(pageSize);
         }
 
-        public IEnumerable<Albstone> GetAlbstonesByLocation(double Latitude, double Longitude, int radius = 1000)
+        public IEnumerable<Albstone> GetAlbstonesByLocation(double Latitude, double Longitude, int page, int pageSize, int radius = 1000)
         {
+            List<Albstone> albstones = new();
             Coordinate coordinate1 = new Coordinate(Latitude, Longitude);
 
             foreach (var albstone in context.Albstones)
@@ -37,14 +42,18 @@ namespace Albstones.WebApp.Data
 
                 if (distance.Meters < radius)
                 {
-                    yield return albstone;
+                    albstones.Add(albstone);
                 }
             }
+
+            return albstones.Skip((page - 1) * pageSize).Take(pageSize);
         }
 
-        public IEnumerable<Albstone> GetAlbstonesByName(string name)
+        public IEnumerable<Albstone> GetAlbstonesByName(string name, int page, int pageSize)
         {
-            return context.Albstones.Where(a => a.Name == name);
+            var query = context.Albstones.Where(a => a.Name == name);
+
+            return query.Skip((page - 1) * pageSize).Take(pageSize);
         }
 
         public static void AddAlbstoneData(WebApplication app)
