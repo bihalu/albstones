@@ -34,3 +34,19 @@
     </div>
   }
 </div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="text-center">
+      @if (Model.Albstones.Count > 1)
+      {
+        <a href="?PageNr=@Model.Previous&PageSize=@Model.PageSize" class="btn btn-secondary" role="button">
+          <i class="fa-solid fa-backward-step"></i>
+        </a>
+        <a href="?PageNr=@Model.Next&PageSize=@Model.PageSize" class="btn btn-secondary" role="button">
+          <i class="fa-solid fa-forward-step"></i>
+        </a>
+      }
+    </div>
+  </div>
+</div>

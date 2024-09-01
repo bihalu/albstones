@@ -1,4 +1,5 @@
-﻿using CoordinateSharp;
+﻿using System.Globalization;
+using CoordinateSharp;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -7,28 +8,35 @@ namespace Albstones.WebApp.Models
     [PrimaryKey(nameof(Address), nameof(Date))]
     public class Albstone
     {
-        public string Address { get; set; }
+        public required string Address { get; set; }
 
         public DateTime Date { get; set; }
 
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         public Double Latitude { get; set; }
 
         public Double Longitude { get; set; }
 
-        public string Message { get; set; }
+        public required string Message { get; set; }
 
-        public string Image {  get; set; }
+        public required string Image {  get; set; }
 
         public Coordinate GetCoordinate()
         {
             return new Coordinate(Latitude, Longitude, Date);
         }
 
-        public string FormatCoordinate()
+        public string FormatCoordinate(bool dec = false)
         {
-            return GetCoordinate().ToString();
+            if (dec)
+            {
+                return $"{Latitude.ToString("F", CultureInfo.CreateSpecificCulture("en-US"))} {Longitude.ToString("F", CultureInfo.CreateSpecificCulture("en-US"))}";
+            }
+            else
+            {
+                return GetCoordinate().ToString();
+            }
         }
 
         public string ToJson()

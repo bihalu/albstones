@@ -15,6 +15,16 @@ namespace Albstones.WebApp.Pages
         [BindProperty(SupportsGet = true)]
         public string? Item {  get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public int PageNr { get; set; } = 1;
+
+        [BindProperty(SupportsGet = true)]
+        public int PageSize { get; set; } = 9;
+
+        public int Previous { get { return PageNr > 1 ? PageNr - 1 : 1; } }
+        
+        public int Next { get { return Albstones.Count == PageSize ? PageNr + 1 : PageNr; } }
+
         public SearchModel(ILogger<SearchModel> logger)
         {
             _logger = logger;
@@ -27,7 +37,7 @@ namespace Albstones.WebApp.Pages
 
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync($"{baseUri}/api/albstones/{Item}?Page=1&PageSize=9"))
+                using (var response = await httpClient.GetAsync($"{baseUri}/api/albstones/{Item}?Page={PageNr}&PageSize={PageSize}"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     Albstones = JsonConvert.DeserializeObject<List<Albstone>>(apiResponse);

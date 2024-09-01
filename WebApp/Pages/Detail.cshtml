@@ -10,11 +10,12 @@
     <div class="col-sm-12">
       <div class="text-center">
         <img class="rounded" src="data:image/png;base64, @Model.Albstones[i].Image" alt="@Model.Albstones[i].Name">
-        <p>@Model.Albstones[i].Name</p>
-        <p>@Model.Albstones[i].Address</p>
-        <p>@Model.Albstones[i].Date</p>
-        <p>@Model.Albstones[i].Message</p>
-        <p>@Model.Albstones[i].FormatCoordinate()</p>
+        <p>Name: @Model.Albstones[i].Name</p>
+        <p>Addresse: @Model.Albstones[i].Address</p>
+        <p>Geburtsdatum: @Model.Albstones[i].Date</p>
+        <p>Nachricht: @Model.Albstones[i].Message</p>
+        <p>Koordinaten: @Model.Albstones[i].FormatCoordinate()</p>
+        <p>Dezimal: @Model.Albstones[i].FormatCoordinate(true)</p>
       </div>
     </div>
   </div>
