@@ -17,7 +17,7 @@ namespace Albstones.WebApp.Data
 
         public IEnumerable<Albstone> GetAlbstonesByAddress(string address, int page, int pageSize)
         {
-            var query = context.Albstones.Where(a => a.Address == address);
+            var query = context.Albstones.Where(a => a.Address == address).OrderByDescending(s => s.Date);
 
             return query.Skip((page - 1) * pageSize).Take(pageSize);
         }
@@ -51,7 +51,7 @@ namespace Albstones.WebApp.Data
 
         public IEnumerable<Albstone> GetAlbstonesByName(string name, int page, int pageSize)
         {
-            var query = context.Albstones.Where(a => a.Name == name);
+            var query = context.Albstones.Where(a => a.Name == name).OrderByDescending(s => s.Date);
 
             return query.Skip((page - 1) * pageSize).Take(pageSize);
         }

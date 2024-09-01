@@ -4,15 +4,33 @@
   ViewData["Title"] = "Suche";
 }
 
-<h1>@ViewData["Title"]</h1>
+<form>
+  <p>
+    <div class="input-group">
+      <input type="text" asp-for="Item" class="form-control" placeholder="Suche nach Name, Addresse oder Lokation des Albstones" />
+      <div class="input-group-append">
+        <button class="btn btn-secondary" type="submit">
+          <i class="fa fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </p>
+</form>
 
-
-<p>Suche</p>
-
-@foreach (var albstone in Model.Albstones)
-{
-  <p>Name: @albstone.Name</p>
-  <p>Geburtsdatum: @albstone.Date</p>
-  <p>Adresse: @albstone.Address</p>
-  <img id="@albstone.Address" src="data:image/png;base64, @albstone.Image" alt="@albstone.Name" />
-}
+<div class="row">
+  @for (int i = 0; i < Model.Albstones.Count; i++)
+  {
+    if (i > 0 && i % 3 == 0)
+    {
+      @:</div><div class="row">
+    }
+    <div class="col-sm-4">
+      <div class="text-center">
+        <a href="Detail/?Item=@Model.Albstones[i].Address">
+          <img class="rounded" src="data:image/png;base64, @Model.Albstones[i].Image" alt="@Model.Albstones[i].Name">
+          <p>@Model.Albstones[i].Name</p>
+        </a>
+      </div>
+    </div>
+  }
+</div>

@@ -7,14 +7,18 @@ namespace Albstones.WebApp.Pages
 {
     public class SearchModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly ILogger<SearchModel> _logger;
 
         [ViewData]
         public List<Albstone> Albstones { get; set; }
 
-        public SearchModel(ILogger<IndexModel> logger)
+        [BindProperty(SupportsGet = true)]
+        public string? Item {  get; set; }
+
+        public SearchModel(ILogger<SearchModel> logger)
         {
             _logger = logger;
+            Albstones = new List<Albstone>();
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -23,7 +27,7 @@ namespace Albstones.WebApp.Pages
 
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync(baseUri + "/api/albstones?Page=1&PageSize=9"))
+                using (var response = await httpClient.GetAsync($"{baseUri}/api/albstones/{Item}?Page=1&PageSize=9"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     Albstones = JsonConvert.DeserializeObject<List<Albstone>>(apiResponse);
