@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Albstones.WebApp;
 
-class Program
+public class Program
 {
-    static void Main(string[] args)
+    public static void Main(string[] args)
     {
         // in memory sqlite database
         var connection = new SqliteConnection("Filename=:memory:");
