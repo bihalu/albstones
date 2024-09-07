@@ -40,7 +40,9 @@ namespace Albstones.WebApp.Pages
                 using (var response = await httpClient.GetAsync($"{baseUri}/api/albstones/{Item}?Page={PageNr}&PageSize={PageSize}"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
+#pragma warning disable CS8601 // Mögliche Nullverweiszuweisung.
                     Albstones = JsonConvert.DeserializeObject<List<Albstone>>(apiResponse);
+#pragma warning restore CS8601 // Mögliche Nullverweiszuweisung.
                 }
             }
 

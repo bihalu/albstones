@@ -45,7 +45,9 @@ namespace Albstones.WebApp.Helpers
         public static string[] Mnemonic(string name, Coordinate coordinate)
         {
             string[] word = new string[12];
+#pragma warning disable CS0618 // Typ oder Element ist veraltet
             string magic = name + coordinate.CelestialInfo.AstrologicalSigns.ZodiacSign + "Albstones";
+#pragma warning restore CS0618 // Typ oder Element ist veraltet
             magic = magic.ToLower();
             magic = magic.Replace("x", ""); // English word list contains no word with x
             magic = Regex.Replace(magic, @"[^\u0000-\u007F]+", string.Empty); // Remove none ascii characters
