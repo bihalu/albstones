@@ -123,6 +123,7 @@ public class AlbstoneTest
         Randomizer.Seed = new Random(420);
         DateTime millenium = new DateTime(2000, 1, 1, 0, 0, 0);
 
+        // Act
         var albstoneFaker = new Faker<Albstone>("de")
             .RuleFor(a => a.Name, f => f.Name.FirstName(f.Person.Gender))
             .RuleFor(a => a.Date, f => f.Date.Future(20, millenium))
@@ -140,8 +141,7 @@ public class AlbstoneTest
             string seed = Magic.SeedHex(mnemonic);
             albstone.Address = Magic.Address(seed, 0);
         }
-
-        // Act
+        
         foreach (var albstone in albstones)
         {
             Log.Information("{albstone}", albstone.ToJson());
