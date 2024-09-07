@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace Albstones.Helpers;
 
+// Bitcoin magic see -> https://iancoleman.io/bip39/
 public static class Magic
 {
     public static string SeedHex(string[] word, string password = "")
@@ -22,7 +23,7 @@ public static class Magic
         return key.GetWif(Network.Main).ToString();
     }
 
-    public static string Address(string seedHex, int index = 0)
+    public static string Address(string seedHex, int index = 0, ScriptPubKeyType type = ScriptPubKeyType.Segwit)
     {
         var seed = Encoders.Hex.DecodeData(seedHex);
         ExtKey rootKey = ExtKey.CreateFromSeed(seed);
@@ -30,7 +31,7 @@ public static class Magic
         var keyPath = KeyPath.Parse("44'/0'/0'/" + index);
 
         var extPrivKey = rootKey.Derive(keyPath).GetWif(Network.Main);
-        var address = rootKey.Derive(keyPath).GetPublicKey().GetAddress(ScriptPubKeyType.Segwit, Network.Main);
+        var address = rootKey.Derive(keyPath).GetPublicKey().GetAddress(type, Network.Main);
 
         return address.ToString();
     }
@@ -49,7 +50,7 @@ public static class Magic
         string magic = name + moonName + "Albstones";
         magic = magic.ToLower();
         magic = magic.Replace("x", ""); // English word list contains no word with x
-        magic = Regex.Replace(magic, @"[^\u0000-\u007F]+", string.Empty); // Remove none ascii characters
+        magic = Regex.Replace(magic, @"[^\u0000-\u007F]+", ""); // Remove none ascii characters
 
         var wordlist = Wordlist.English.GetWords().ToArray();
 
