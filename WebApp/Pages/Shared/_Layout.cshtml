@@ -26,6 +26,9 @@
               <a class="nav-link text-dark" asp-area="" asp-page="/Search">Suche</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link text-dark" asp-area="" asp-page="/Scan">Scan</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link text-dark" asp-area="" asp-page="/Tutorial">Anleitung</a>
             </li>
             <li class="nav-item">
@@ -53,6 +56,7 @@
 
   <script src="~/lib/jquery/dist/jquery.min.js"></script>
   <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="~/lib/html5-qrcode/html5-qrcode.min.js"></script>
   <script src="~/js/site.js" asp-append-version="true"></script>
 
   @await RenderSectionAsync("Scripts", required: false)

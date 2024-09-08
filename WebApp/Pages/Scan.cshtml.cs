@@ -2,14 +2,15 @@
 
 namespace Albstones.WebApp.Pages;
 
-public class TutorialModel : PageModel
+public class ScanModel : PageModel
 {
-    private readonly ILogger<TutorialModel> _logger;
+    private readonly ILogger<ScanModel> _logger;
 
-    public TutorialModel(ILogger<TutorialModel> logger)
+    public ScanModel(ILogger<ScanModel> logger)
     {
         _logger = logger;
     }
+
     public void OnGet()
     {
     }
