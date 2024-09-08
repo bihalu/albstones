@@ -1,4 +1,5 @@
-﻿using Albstones.Models;
+﻿using Albstones.Helpers;
+using Albstones.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -11,6 +12,12 @@ public class DetailModel : PageModel
 
     [ViewData]
     public List<Albstone> Albstones { get; set; }
+
+    [ViewData]
+    public string Words { get; set; } = "";
+
+    [ViewData]
+    public string WordsBase64 { get; set; } = "";
 
     [BindProperty(SupportsGet = true)]
     public string? Item { get; set; }
@@ -30,6 +37,11 @@ public class DetailModel : PageModel
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 Albstones = JsonConvert.DeserializeObject<List<Albstone>>(apiResponse)!;
+
+                Words = string.Join(' ', Magic.Mnemonic(Albstones[0].Name, Albstones[0].GetCoordinate()));
+
+                var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(Words);
+                WordsBase64 = Convert.ToBase64String(plainTextBytes);
             }
         }
 

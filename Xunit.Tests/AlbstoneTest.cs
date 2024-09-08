@@ -1,12 +1,12 @@
 ﻿using Albstones.Models;
 using Albstones.Helpers;
+using Albstones.WebApp.Data;
 using Bogus;
 using CoordinateSharp;
 using Serilog;
 using Xunit.Abstractions;
-using Albstones.WebApp.Data;
 
-namespace WebApp.Tests;
+namespace Xunit.Tests;
 
 public class AlbstoneTest
 {
@@ -23,7 +23,7 @@ public class AlbstoneTest
     public void AlbstoneToJson()
     {
         // Arrange
-        string expected = File.ReadAllText("Testdata/albstone.json");
+        var expected = File.ReadAllText("Testdata/albstone.json");
         var albstone = new Albstone()
         {
             Address = "Address",
@@ -36,7 +36,7 @@ public class AlbstoneTest
         };
 
         // Act
-        string actual = albstone.ToJson();
+        var actual = albstone.ToJson();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -46,7 +46,7 @@ public class AlbstoneTest
     public void AlbstoneFormatCoordinate()
     {
         // Arrange
-        string expected = @"N 48º 21' 19,31"" E 8º 58' 4,947""";
+        var expected = @"N 48º 21' 19,31"" E 8º 58' 4,947""";
         var albstone = new Albstone()
         {
             Address = "Address",
@@ -59,7 +59,7 @@ public class AlbstoneTest
         };
 
         // Act
-        string actual = albstone.FormatCoordinate();
+        var actual = albstone.FormatCoordinate();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -69,7 +69,7 @@ public class AlbstoneTest
     public void AlbstoneParse()
     {
         // Arrange
-        string json = File.ReadAllText("Testdata/albstone.json");
+        var json = File.ReadAllText("Testdata/albstone.json");
         var expected = new Albstone()
         {
             Address = "Address",
@@ -92,8 +92,8 @@ public class AlbstoneTest
     public void AlbstoneParseWithImage()
     {
         // Arrange
-        string json = File.ReadAllText("Testdata/albstone128x128.json");
-        string image = "Testdata/albstone128x128.png";
+        var json = File.ReadAllText("Testdata/albstone128x128.json");
+        var image = "Testdata/albstone128x128.png";
         var expected = new Albstone()
         {
             Address = "Address",
@@ -116,12 +116,12 @@ public class AlbstoneTest
     public void AlbstoneFaker()
     {
         // Arrange
-        string albstone0 = File.ReadAllText("Testdata/albstone0.json");
-        string albstone1 = File.ReadAllText("Testdata/albstone1.json");
-        string albstone2 = File.ReadAllText("Testdata/albstone2.json");
+        var albstone0 = File.ReadAllText("Testdata/albstone0.json");
+        var albstone1 = File.ReadAllText("Testdata/albstone1.json");
+        var albstone2 = File.ReadAllText("Testdata/albstone2.json");
 
         Randomizer.Seed = new Random(420);
-        DateTime millenium = new DateTime(2000, 1, 1, 0, 0, 0);
+        var millenium = new DateTime(2000, 1, 1, 0, 0, 0);
 
         // Act
         var albstoneFaker = new Faker<Albstone>("de")
@@ -136,12 +136,12 @@ public class AlbstoneTest
 
         foreach (var albstone in albstones)
         {
-            Coordinate coordinate = new Coordinate(albstone.Latitude, albstone.Longitude, albstone.Date);
-            string[] mnemonic = Magic.Mnemonic(albstone.Name, coordinate);
-            string seed = Magic.SeedHex(mnemonic);
+            var coordinate = new Coordinate(albstone.Latitude, albstone.Longitude, albstone.Date);
+            var mnemonic = Magic.Mnemonic(albstone.Name, coordinate);
+            var seed = Magic.SeedHex(mnemonic);
             albstone.Address = Magic.Address(seed, 0);
         }
-        
+
         foreach (var albstone in albstones)
         {
             Log.Information("{albstone}", albstone.ToJson());
