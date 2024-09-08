@@ -1,10 +1,10 @@
-﻿using Albstones.Models;
-using Albstones.Helpers;
-using Albstones.WebApp.Data;
+﻿using Albstones.WebApp.Data;
 using Bogus;
 using CoordinateSharp;
 using Serilog;
 using Xunit.Abstractions;
+using Albstones.Helper;
+using Albstones.Models;
 
 namespace Xunit.Tests;
 

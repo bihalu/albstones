@@ -3,7 +3,7 @@ using NBitcoin;
 using NBitcoin.DataEncoders;
 using System.Text.RegularExpressions;
 
-namespace Albstones.Helpers;
+namespace Albstones.Helper;
 
 // Bitcoin magic see -> https://iancoleman.io/bip39/
 public static class Magic
@@ -18,7 +18,7 @@ public static class Magic
     public static string RootKey(string seedHex)
     {
         var seed = Encoders.Hex.DecodeData(seedHex);
-        ExtKey key = ExtKey.CreateFromSeed(seed);
+        var key = ExtKey.CreateFromSeed(seed);
 
         return key.GetWif(Network.Main).ToString();
     }
@@ -26,7 +26,7 @@ public static class Magic
     public static string Address(string seedHex, int index = 0, ScriptPubKeyType type = ScriptPubKeyType.Segwit)
     {
         var seed = Encoders.Hex.DecodeData(seedHex);
-        ExtKey rootKey = ExtKey.CreateFromSeed(seed);
+        var rootKey = ExtKey.CreateFromSeed(seed);
 
         var keyPath = KeyPath.Parse("44'/0'/0'/" + index);
 
@@ -45,26 +45,26 @@ public static class Magic
 
     public static string[] Mnemonic(string name, Coordinate coordinate)
     {
-        string[] word = new string[12];
-        string moonName = coordinate.CelestialInfo.AlmanacMoonName.Name;
-        string magic = name + moonName + "Albstones";
+        var word = new string[12];
+        var moonName = coordinate.CelestialInfo.AlmanacMoonName.Name;
+        var magic = name + moonName + "Albstones";
         magic = magic.ToLower();
         magic = magic.Replace("x", ""); // English word list contains no word with x
         magic = Regex.Replace(magic, @"[^\u0000-\u007F]+", ""); // Remove none ascii characters
 
         var wordlist = Wordlist.English.GetWords().ToArray();
 
-        int counter = 0;
-        foreach (char c in magic.Substring(0, 12))
+        var counter = 0;
+        foreach (var c in magic.Substring(0, 12))
         {
             word[counter++] = wordlist.First(w => w[0] == c);
         }
 
         var mnemonic = new Mnemonic(string.Join(' ', word), Wordlist.English);
 
-        while(!mnemonic.IsValidChecksum)
+        while (!mnemonic.IsValidChecksum)
         {
-            int index = Array.IndexOf(wordlist, word[11]) + 1;
+            var index = Array.IndexOf(wordlist, word[11]) + 1;
             if (index >= wordlist.Length) index = 0;
             word[11] = wordlist[index];
             mnemonic = new Mnemonic(string.Join(' ', word), Wordlist.English);

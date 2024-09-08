@@ -14,13 +14,13 @@ public class Albstone
 
     public required string Name { get; set; }
 
-    public Double Latitude { get; set; }
+    public double Latitude { get; set; }
 
-    public Double Longitude { get; set; }
+    public double Longitude { get; set; }
 
     public required string Message { get; set; }
 
-    public required string Image {  get; set; }
+    public required string Image { get; set; }
 
     public Coordinate GetCoordinate()
     {
@@ -31,8 +31,8 @@ public class Albstone
     {
         if (decimalFormat)
         {
-            string latitudeDecimal = Latitude.ToString("F", CultureInfo.CreateSpecificCulture("en-US"));
-            string longitudeDecimal = Longitude.ToString("F", CultureInfo.CreateSpecificCulture("en-US"));
+            var latitudeDecimal = Latitude.ToString("F", CultureInfo.CreateSpecificCulture("en-US"));
+            var longitudeDecimal = Longitude.ToString("F", CultureInfo.CreateSpecificCulture("en-US"));
 
             return $"{latitudeDecimal} {longitudeDecimal}";
         }
@@ -53,7 +53,7 @@ public class Albstone
 
         if (image != null)
         {
-            byte[] byteArray = File.ReadAllBytes(image);
+            var byteArray = File.ReadAllBytes(image);
             albstone.Image = Convert.ToBase64String(byteArray);
         }
 

@@ -1,7 +1,7 @@
-﻿using Albstones.Helpers;
-using Albstones.Models;
-using Albstones.WebApp.Data;
+﻿using Albstones.WebApp.Data;
 using Albstones.WebApp.Models;
+using Albstones.Helper;
+using Albstones.Models;
 using CoordinateSharp;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;

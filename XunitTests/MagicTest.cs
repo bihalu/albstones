@@ -1,4 +1,4 @@
-﻿using Albstones.Helpers;
+﻿using Albstones.Helper;
 using CoordinateSharp;
 
 namespace Xunit.Tests;
