@@ -6,7 +6,7 @@ using Xunit.Abstractions;
 using Albstones.Helper;
 using Albstones.Models;
 
-namespace Xunit.Tests;
+namespace XunitTests;
 
 public class AlbstoneTest
 {

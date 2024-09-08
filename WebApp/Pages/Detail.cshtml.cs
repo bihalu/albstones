@@ -31,19 +31,15 @@ public class DetailModel : PageModel
     {
         var baseUri = $"{Request.Scheme}://{Request.Host}";
 
-        using (var httpClient = new HttpClient())
-        {
-            using (var response = await httpClient.GetAsync($"{baseUri}/api/albstones/{Item}?Page=1&PageSize=9"))
-            {
-                string apiResponse = await response.Content.ReadAsStringAsync();
-                Albstones = JsonConvert.DeserializeObject<List<Albstone>>(apiResponse)!;
+        using var httpClient = new HttpClient();
+        using var response = await httpClient.GetAsync($"{baseUri}/api/albstones/{Item}?Page=1&PageSize=9");
+        var apiResponse = await response.Content.ReadAsStringAsync();
+        Albstones = JsonConvert.DeserializeObject<List<Albstone>>(apiResponse)!;
 
-                Words = string.Join(' ', Magic.Mnemonic(Albstones[0].Name, Albstones[0].GetCoordinate()));
+        Words = string.Join(' ', Magic.Mnemonic(Albstones[0].Name, Albstones[0].GetCoordinate()));
 
-                var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(Words);
-                WordsBase64 = Convert.ToBase64String(plainTextBytes);
-            }
-        }
+        var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(Words);
+        WordsBase64 = Convert.ToBase64String(plainTextBytes);
 
         return Page();
     }

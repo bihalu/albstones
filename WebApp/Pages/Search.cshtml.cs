@@ -35,16 +35,12 @@ public class SearchModel : PageModel
     {
         var baseUri = $"{Request.Scheme}://{Request.Host}";
 
-        using (var httpClient = new HttpClient())
-        {
-            using (var response = await httpClient.GetAsync($"{baseUri}/api/albstones/{Item}?Page={PageNr}&PageSize={PageSize}"))
-            {
-                string apiResponse = await response.Content.ReadAsStringAsync();
+        using var httpClient = new HttpClient();
+        using var response = await httpClient.GetAsync($"{baseUri}/api/albstones/{Item}?Page={PageNr}&PageSize={PageSize}");
+        var apiResponse = await response.Content.ReadAsStringAsync();
 #pragma warning disable CS8601 // Mögliche Nullverweiszuweisung.
-                Albstones = JsonConvert.DeserializeObject<List<Albstone>>(apiResponse);
+        Albstones = JsonConvert.DeserializeObject<List<Albstone>>(apiResponse);
 #pragma warning restore CS8601 // Mögliche Nullverweiszuweisung.
-            }
-        }
 
         return Page();
     }

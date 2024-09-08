@@ -72,6 +72,15 @@ public class AlbstoneRepository : IAlbstoneRepository
         context.SaveChanges();
     }
 
+    public static string DefaultImage()
+    {
+        using var stream = typeof(Program).Assembly.GetManifestResourceStream("Albstones.WebApp.wwwroot.default.png")!;
+        var bytes = new Byte[(int)stream.Length];
+        stream.Seek(0, SeekOrigin.Begin);
+        stream.Read(bytes, 0, (int)stream.Length);
+        return Convert.ToBase64String(bytes);
+    }
+
     private static List<Albstone> FakeData()
     {
         Randomizer.Seed = new Random(420);
@@ -96,14 +105,5 @@ public class AlbstoneRepository : IAlbstoneRepository
         }
 
         return albstones;
-    }
-
-    public static string DefaultImage()
-    {
-        using var stream = typeof(Program).Assembly.GetManifestResourceStream("Albstones.WebApp.wwwroot.default.png")!;
-        var bytes = new Byte[(int)stream.Length];
-        stream.Seek(0, SeekOrigin.Begin);
-        stream.Read(bytes, 0, (int)stream.Length);
-        return Convert.ToBase64String(bytes);
     }
 }

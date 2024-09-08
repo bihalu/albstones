@@ -1,9 +1,8 @@
 ﻿using Albstones.Helper;
 using CoordinateSharp;
 
-namespace Xunit.Tests;
+namespace XunitTests;
 
-// https://iancoleman.io/bip39/
 public class MagicTest
 {
     [Fact]
