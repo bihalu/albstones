@@ -108,12 +108,14 @@ internal class Program
                 Console.WriteLine("Add Albstone " + name);
                 albstones.Add(albstone);
 
+                var scanBytes = System.Text.Encoding.UTF8.GetBytes(string.Join(' ', word));
+                var scan = Convert.ToBase64String(scanBytes);
                 var gen = new QRCodeGenerator();
-                var data = gen.CreateQrCode(string.Join(' ', word), QRCodeGenerator.ECCLevel.Q);
+                var data = gen.CreateQrCode(scan, QRCodeGenerator.ECCLevel.H);
                 var asciiCode = new AsciiQRCode(data).GetGraphicSmall(invert: false);
                 Console.WriteLine(asciiCode);
 
-                var data2 = gen.CreateQrCode(string.Join(' ', word), QRCodeGenerator.ECCLevel.L);
+                var data2 = gen.CreateQrCode(scan, QRCodeGenerator.ECCLevel.H);
                 var pngCode = new PngByteQRCode(data2).GetGraphic(5);
 
                 File.WriteAllBytes(address + ".png", pngCode);
