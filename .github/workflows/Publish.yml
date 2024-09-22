@@ -18,14 +18,13 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: Get version
-      id: get_version
-      uses: jannemattila/get-version-from-tag@v3
-
     - name: Display version
       run: |
-        VERSION=$(echo "${{ steps.get_version.outputs.version }}")
-        echo $VERSION
+        TAG=${{github.ref_name}}
+        echo github.ref_name $TAG
+        echo GITHUB_REF_NAME $GITHUB_REF_NAME
+        VERSION=${GITHUB_REF_NAME:1}
+        echo VERSION $VERSION
 
     - name: Publish ConsoleApp
       run: dotnet publish ConsoleApp/ConsoleApp.csproj -p:Version=$VERSION
@@ -41,4 +40,4 @@ jobs:
       with:
         context: WebApp/bin/Release/net8.0/linux-x64/publish
         push: false
-        tags: albstones:$VERSION
+        tags: albstones:$TAG
