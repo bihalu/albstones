@@ -38,6 +38,7 @@ public class Albstone
         }
         else
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             return GetCoordinate().ToString();
         }
     }

@@ -46,7 +46,7 @@ public class AlbstoneTest
     public void AlbstoneFormatCoordinate()
     {
         // Arrange
-        var expected = @"N 48º 21' 19,31"" E 8º 58' 4,947""";
+        var expected = @"N 48º 21' 19.31"" E 8º 58' 4.947""";
         var albstone = new Albstone()
         {
             Address = "Address",
@@ -60,6 +60,29 @@ public class AlbstoneTest
 
         // Act
         var actual = albstone.FormatCoordinate();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void AlbstoneFormatCoordinateDecimal()
+    {
+        // Arrange
+        var expected = "48.355 8.968";
+        var albstone = new Albstone()
+        {
+            Address = "Address",
+            Name = "Name",
+            Date = new DateTime(1972, 01, 09, 08, 00, 00),
+            Latitude = 48.3553639,
+            Longitude = 8.9680407,
+            Message = "Message",
+            Image = "Image",
+        };
+
+        // Act
+        var actual = albstone.FormatCoordinate(true);
 
         // Assert
         Assert.Equal(expected, actual);
