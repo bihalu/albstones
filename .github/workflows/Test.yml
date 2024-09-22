@@ -1,27 +1,28 @@
 ---
-name: dotnet test
+name: Test
 on:
   push:
-    branches: [ main ]
+    branches:
+    - main
 jobs:
-  build:
-    name: Build
+  test:
+    name: Test
     runs-on: self-hosted
     steps:
 
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Setup dotnet
+    - name: Setup
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.0.x'
 
-    - name: Install dependencies
+    - name: Restore
       run: dotnet restore
 
     - name: Build
       run: dotnet build
 
-    - name: Test with the dotnet CLI
+    - name: Test
       run: dotnet test

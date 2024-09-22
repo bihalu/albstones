@@ -1,0 +1,44 @@
+---
+name: Publish
+on:
+  push:
+    tags:
+    - '*'
+jobs:
+  publish:
+    name: Publish
+    runs-on: self-hosted
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Get version
+      id: get_version
+      uses: jannemattila/get-version-from-tag@v3
+
+    - name: Display version
+      run: |
+        VERSION=$(echo "${{ steps.get_version.outputs.version }}")
+        echo $VERSION
+
+    - name: Publish ConsoleApp
+      run: dotnet publish ConsoleApp/ConsoleApp.csproj -p:Version=$VERSION
+
+    - name: Publish WebApp
+      run: dotnet publish WebApp/WebApp.csproj -r linux-x64 -p:Version=$VERSION
+
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Docker build
+      uses: docker/build-push-action@v6
+      with:
+        context: WebApp/bin/Release/net8.0/linux-x64/publish
+        push: false
+        tags: albstones:$VERSION

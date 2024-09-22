@@ -20,6 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibrary", "ClassLibrar
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{88925912-26C6-4C99-827E-A0E76FEF854F}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\Publish.yml = .github\workflows\Publish.yml
 		.github\workflows\Test.yml = .github\workflows\Test.yml
 	EndProjectSection
 EndProject
