@@ -22,6 +22,8 @@ public class Albstone
 
     public required string Image { get; set; }
 
+    private static CultureInfo _en_US = new CultureInfo("en-US");
+
     public Coordinate GetCoordinate()
     {
         return new Coordinate(Latitude, Longitude, Date);
@@ -31,14 +33,14 @@ public class Albstone
     {
         if (decimalFormat)
         {
-            var latitudeDecimal = Latitude.ToString("F", CultureInfo.CreateSpecificCulture("en-US"));
-            var longitudeDecimal = Longitude.ToString("F", CultureInfo.CreateSpecificCulture("en-US"));
+            var latitudeDecimal = Latitude.ToString("F", _en_US);
+            var longitudeDecimal = Longitude.ToString("F", _en_US);
 
             return $"{latitudeDecimal} {longitudeDecimal}";
         }
         else
         {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = _en_US;
             return GetCoordinate().ToString();
         }
     }

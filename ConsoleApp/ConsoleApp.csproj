@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <InvariantGlobalization>true</InvariantGlobalization>
     <RootNamespace>Albstones.ConsoleApp</RootNamespace>
-    <AssemblyName>CreateAlbstones</AssemblyName>
+    <AssemblyName>create_albstones</AssemblyName>
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

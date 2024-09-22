@@ -54,19 +54,19 @@ public class AlbstoneController : ControllerBase
             return Ok(albstones);
         }
 
-        // search for address
+        // search by address
         if (search.StartsWith("bc1"))
         {
             return Ok(Repository.GetAlbstonesByAddress(search, queryParameter.Page, queryParameter.PageSize));
         }
 
-        // search for location
+        // search by location
         if (Coordinate.TryParse(search, out Coordinate coordinate))
         {
             return Ok(Repository.GetAlbstonesByLocation(coordinate.Latitude.ToDouble(), coordinate.Longitude.ToDouble(), queryParameter.Page, queryParameter.PageSize));
         }
 
-        // search for name
+        // search by name
         return Ok(Repository.GetAlbstonesByName(search, queryParameter.Page, queryParameter.PageSize));
     }
 

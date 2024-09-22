@@ -1,10 +1,10 @@
-﻿using Albstones.WebApp.Data;
+﻿using Albstones.Helper;
+using Albstones.Models;
+using Albstones.WebApp.Data;
 using Bogus;
 using CoordinateSharp;
 using Serilog;
 using Xunit.Abstractions;
-using Albstones.Helper;
-using Albstones.Models;
 
 namespace XunitTests;
 
@@ -12,11 +12,7 @@ public class AlbstoneTest
 {
     public AlbstoneTest(ITestOutputHelper output)
     {
-        Log.Logger = new LoggerConfiguration()
-        // add the xunit test output sink to the serilog logger
-        // https://github.com/trbenning/serilog-sinks-xunit#serilog-sinks-xunit
-        .WriteTo.TestOutput(output)
-        .CreateLogger();
+        Log.Logger = new LoggerConfiguration().WriteTo.TestOutput(output).CreateLogger();
     }
 
     [Fact]

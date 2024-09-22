@@ -1,6 +1,6 @@
-﻿using Bogus;
-using Albstones.Helper;
+﻿using Albstones.Helper;
 using Albstones.Models;
+using Bogus;
 using CoordinateSharp;
 using Microsoft.EntityFrameworkCore;
 
