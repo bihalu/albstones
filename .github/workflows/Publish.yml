@@ -46,4 +46,4 @@ jobs:
       with:
         context: WebApp/bin/Release/net8.0/linux-x64/publish
         push: false
-        tags: albstones:$TAG
+        tags: albstones:$GITHUB_REF_NAME
