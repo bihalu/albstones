@@ -20,17 +20,18 @@ jobs:
 
     - name: Display version
       run: |
-        TAG=${{github.ref_name}}
-        echo github.ref_name $TAG
-        echo GITHUB_REF_NAME $GITHUB_REF_NAME
+        TAG=${GITHUB_REF_NAME}
         VERSION=${GITHUB_REF_NAME:1}
-        echo VERSION $VERSION
+        ASSEMBLY_VERSION=${VERSION%-*}
+        echo TAG=$TAG
+        echo VERSION=$VERSION
+        echo ASSEMBLY_VERSION=$ASSEMBLY_VERSION
 
     - name: Publish ConsoleApp
-      run: dotnet publish ConsoleApp/ConsoleApp.csproj -p:Version=$VERSION
+      run: dotnet publish ConsoleApp/ConsoleApp.csproj -p:Version=$VERSION -p:AssemblyVersion=$ASSEMBLY_VERSION
 
     - name: Publish WebApp
-      run: dotnet publish WebApp/WebApp.csproj -r linux-x64 -p:Version=$VERSION
+      run: dotnet publish WebApp/WebApp.csproj -r linux-x64 -p:Version=$VERSION -p:AssenblyVersion=$ASSEMBLY_VERSION
 
     - name: Setup Docker Buildx
       uses: docker/setup-buildx-action@v3
