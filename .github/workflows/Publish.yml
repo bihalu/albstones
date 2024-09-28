@@ -49,3 +49,4 @@ jobs:
         context: WebApp
         push: true
         tags: localhost:5000/albstones:${{ env.TAG }}
+
