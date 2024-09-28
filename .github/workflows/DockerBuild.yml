@@ -8,13 +8,6 @@ jobs:
   publish:
     name: DockerBuild
     runs-on: self-hosted
-    
-    services:
-      registry:
-        image: registry:2
-        ports:
-          - 5000:5000
-
     steps:
 
     - name: Checkout
@@ -37,4 +30,4 @@ jobs:
       with:
         file: WebApp/Dockerfile
         push: true
-        tags: localhost:5000/albstones:${{ env.TAG }}
+        tags: registry-service/albstones:${{ env.TAG }}

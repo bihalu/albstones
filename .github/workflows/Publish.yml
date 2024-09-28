@@ -8,7 +8,6 @@ jobs:
   publish:
     name: Publish
     runs-on: self-hosted
-
     steps:
 
     - name: Checkout
@@ -32,9 +31,7 @@ jobs:
       run: dotnet publish ConsoleApp/ConsoleApp.csproj -c Release -r win-x64 -p:Version=$VERSION -p:AssemblyVersion=$ASSEMBLY_VERSION -p:PublishSingleFile=true --self-contained true
 
     - name: Print artefacts
-      run: |
-        apt install -y tree
-        tree ConsoleApp/bin/Release/net8.0/win-x64/publish
+      run: ls -la ConsoleApp/bin/Release/net8.0/win-x64/publish
 
     - name: Upload ConsoleApp
       uses: actions/upload-artifact@v4
@@ -46,9 +43,7 @@ jobs:
       run: dotnet publish WebApp/WebApp.csproj -c Release -r linux-x64 -p:Version=$VERSION -p:AssemblyVersion=$ASSEMBLY_VERSION -p:PublishSingleFile=true --self-contained true
 
     - name: Print artefacts
-      run: |
-        apt install -y tree
-        tree WebApp/bin/Release/net8.0/linux-x64/publish
+      run: ls -la WebApp/bin/Release/net8.0/linux-x64/publish
 
     - name: Upload WebApp
       uses: actions/upload-artifact@v4
