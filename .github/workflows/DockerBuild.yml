@@ -25,7 +25,7 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
       with:
-        config: .github/buildkitd.toml
+        config: .github/buildkit.toml
 
     - name: Docker build
       uses: docker/build-push-action@v6
