@@ -29,19 +29,25 @@ jobs:
         echo "ASSEMBLY_VERSION=$ASSEMBLY_VERSION" >> $GITHUB_ENV
   
     - name: Publish ConsoleApp
-      run: dotnet publish ConsoleApp/ConsoleApp.csproj -c Release -r win-x64 -p:Version=$VERSION -p:AssemblyVersion=$ASSEMBLY_VERSION
+      run: dotnet publish ConsoleApp/ConsoleApp.csproj -c Release -r win-x64 -p:Version=$VERSION -p:AssemblyVersion=$ASSEMBLY_VERSION -p:PublishSingleFile=true --self-contained true
+
+    - name: Print artefacts
+      run: tree ConsoleApp/bin/Release/net8.0/win-x64/publish
 
     - name: Upload ConsoleApp
       uses: actions/upload-artifact@v4
       with:
-        name: CreateAlbstones.exe-win-x64
-        path: ConsoleApp/bin/Release/net8.0/win-x64/publish/CreateAlbstones.exe
+        name: create_albstones.exe-win-x64
+        path: ConsoleApp/bin/Release/net8.0/win-x64/publish/create_albstones.exe
 
     - name: Publish WebApp
       run: dotnet publish WebApp/WebApp.csproj -c Release -r linux-x64 -p:Version=$VERSION -p:AssemblyVersion=$ASSEMBLY_VERSION -p:PublishSingleFile=true --self-contained true
 
+    - name: Print artefacts
+      run: tree WebApp/bin/Release/net8.0/linux-x64/publish
+
     - name: Upload WebApp
       uses: actions/upload-artifact@v4
       with:
-        name: AlbstonesWebApp-linux-x64
-        path: WebApp/bin/Release/net8.0/linux-x64/publish/AlbstonesWebApp
+        name: albstones-linux-x64
+        path: WebApp/bin/Release/net8.0/linux-x64/publish/albstones
