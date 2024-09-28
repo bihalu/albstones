@@ -7,8 +7,6 @@
     <RootNamespace>Albstones.WebApp</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>albstones</AssemblyName>
-    <SelfContained>true</SelfContained>
-    <PublishSingleFile>true</PublishSingleFile>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Dockerfile" />

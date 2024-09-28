@@ -8,12 +8,6 @@ jobs:
   publish:
     name: Publish
     runs-on: self-hosted
-    
-    services:
-      registry:
-        image: registry:2
-        ports:
-          - 5000:5000
 
     steps:
 
@@ -35,18 +29,19 @@ jobs:
         echo "ASSEMBLY_VERSION=$ASSEMBLY_VERSION" >> $GITHUB_ENV
   
     - name: Publish ConsoleApp
-      run: dotnet publish ConsoleApp/ConsoleApp.csproj -p:Version=$VERSION -p:AssemblyVersion=$ASSEMBLY_VERSION
+      run: dotnet publish ConsoleApp/ConsoleApp.csproj -c Release -r win-x64 -p:Version=$VERSION -p:AssemblyVersion=$ASSEMBLY_VERSION
+
+    - name: Upload ConsoleApp
+      uses: actions/upload-artifact@v4
+      with:
+        name: CreateAlbstones.exe-win-x64
+        path: ConsoleApp/bin/Release/net8.0/win-x64/publish/CreateAlbstones.exe
 
     - name: Publish WebApp
-      run: dotnet publish WebApp/WebApp.csproj -r linux-x64 -p:Version=$VERSION -p:AssemblyVersion=$ASSEMBLY_VERSION
+      run: dotnet publish WebApp/WebApp.csproj -c Release -r linux-x64 -p:Version=$VERSION -p:AssemblyVersion=$ASSEMBLY_VERSION -p:PublishSingleFile=true --self-contained true
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Docker build
-      uses: docker/build-push-action@v6
+    - name: Upload WebApp
+      uses: actions/upload-artifact@v4
       with:
-        context: WebApp
-        push: true
-        tags: localhost:5000/albstones:${{ env.TAG }}
-
+        name: AlbstonesWebApp-linux-x64
+        path: WebApp/bin/Release/net8.0/linux-x64/publish/AlbstonesWebApp
