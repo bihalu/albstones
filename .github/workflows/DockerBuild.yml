@@ -24,7 +24,7 @@ jobs:
 
     - name: Install registry cert
       run: |
-        cp registry.crt /usr/local/share/ca-certificates/
+        cp docker-registry.crt /usr/local/share/ca-certificates/
         update-ca-certificates
 
     - name: Set up Docker Buildx
