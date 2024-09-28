@@ -4,6 +4,8 @@ on:
   push:
     tags:
     - '*'
+env:
+  DOCKER_OPTS: "--insecure-registry=registry-service.default.svc.cluster.local"
 jobs:
   publish:
     name: DockerBuild
