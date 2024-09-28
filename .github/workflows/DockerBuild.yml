@@ -4,8 +4,6 @@ on:
   push:
     tags:
     - '*'
-env:
-  DOCKER_OPTS: "--insecure-registry=registry-service.docker-registry.svc.cluster.local:5000"
 jobs:
   publish:
     name: DockerBuild
@@ -23,6 +21,11 @@ jobs:
         echo "TAG=$TAG" >> $GITHUB_ENV
         echo "VERSION=$VERSION" >> $GITHUB_ENV
         echo "ASSEMBLY_VERSION=$ASSEMBLY_VERSION" >> $GITHUB_ENV
+
+    - name: Install registry cert
+      run: |
+        cp registry.crt /usr/local/share/ca-certificates/
+        update-ca-certificates
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3

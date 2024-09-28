@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{3F1D5BFA-E1CA-411F-A9F5-368FF0FCBF2E}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		docker-registry.crt = docker-registry.crt
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
