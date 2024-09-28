@@ -5,7 +5,7 @@ on:
     tags:
     - '*'
 env:
-  DOCKER_OPTS: "--insecure-registry=registry-service.default.svc.cluster.local"
+  DOCKER_OPTS: "--insecure-registry=registry-service.docker-registry.svc.cluster.local:5000"
 jobs:
   publish:
     name: DockerBuild
@@ -32,4 +32,4 @@ jobs:
       with:
         file: WebApp/Dockerfile
         push: true
-        tags: registry-service.default.svc.cluster.local/albstones:${{ env.TAG }}
+        tags: registry-service.docker-registry.svc.cluster.local:5000/albstones:${{ env.TAG }}
