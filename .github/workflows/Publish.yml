@@ -8,6 +8,13 @@ jobs:
   publish:
     name: Publish
     runs-on: self-hosted
+    
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+
     steps:
 
     - name: Checkout
@@ -39,6 +46,6 @@ jobs:
     - name: Docker build
       uses: docker/build-push-action@v6
       with:
-        context: WebApp/bin/Release/net8.0/linux-x64/publish
-        push: false
-        tags: albstones:${{ env.TAG }}
+        context: WebApp
+        push: true
+        tags: localhost:5000/albstones:${{ env.TAG }}
