@@ -1,0 +1,2 @@
+[registry."registry-service.docker-registry.svc.cluster.local:5000"]
+  http = true
