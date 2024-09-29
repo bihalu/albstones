@@ -7,6 +7,7 @@
     <RootNamespace>Albstones.WebApp</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>albstones</AssemblyName>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Dockerfile" />

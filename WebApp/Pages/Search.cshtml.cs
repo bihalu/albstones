@@ -7,9 +7,6 @@ namespace Albstones.WebApp.Pages;
 
 public class SearchModel : PageModel
 {
-    private readonly ILogger<SearchModel> _logger;
-
-    [ViewData]
     public List<Albstone> Albstones { get; set; }
 
     [BindProperty(SupportsGet = true)]
@@ -25,9 +22,14 @@ public class SearchModel : PageModel
     
     public int Next { get { return Albstones.Count == PageSize ? PageNr + 1 : PageNr; } }
 
-    public SearchModel(ILogger<SearchModel> logger)
+    private readonly ILogger<SearchModel> _logger;
+
+    private readonly IConfiguration _config;
+
+    public SearchModel(ILogger<SearchModel> logger, IConfiguration config)
     {
         _logger = logger;
+        _config = config;
         Albstones = new List<Albstone>();
     }
 

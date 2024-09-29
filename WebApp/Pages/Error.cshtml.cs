@@ -14,9 +14,12 @@ public class ErrorModel : PageModel
 
     private readonly ILogger<ErrorModel> _logger;
 
-    public ErrorModel(ILogger<ErrorModel> logger)
+    private readonly IConfiguration _config;
+
+    public ErrorModel(ILogger<ErrorModel> logger, IConfiguration config)
     {
         _logger = logger;
+        _config = config;
     }
 
     public void OnGet()
