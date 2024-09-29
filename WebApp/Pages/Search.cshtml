@@ -4,18 +4,21 @@
   ViewData["Title"] = "Suche";
 }
 
-<form>
-  <p>
-    <div class="input-group">
-      <input type="text" asp-for="Item" class="form-control" placeholder="Suche nach Name, Addresse oder Lokation des Albstones" />
-      <div class="input-group-append">
-        <button class="btn btn-secondary" type="submit">
-          <i class="fa fa-search"></i>
-        </button>
+<div class="row">
+  <h1 id="0">@ViewData["Title"]</h1>
+  <form>
+    <p>
+      <div class="input-group">
+        <input type="text" asp-for="Item" class="form-control" placeholder="Name, Addresse oder Lokation des Albstones" />
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="submit">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
       </div>
-    </div>
-  </p>
-</form>
+    </p>
+  </form>
+</div>
 
 <div class="row">
   @for (int i = 0; i < Model.Albstones.Count; i++)
@@ -35,18 +38,27 @@
   }
 </div>
 
+<br />
+
 <div class="row">
   <div class="col-sm-12">
     <div class="text-center">
-      @if (Model.Albstones.Count > 1)
+      @if (Model.Albstones.Count > 0)
       {
-        <a href="?PageNr=@Model.Previous&PageSize=@Model.PageSize" class="btn btn-secondary" role="button">
-          <i class="fa-solid fa-backward-step"></i>
+        <a href="?PageNr=@Model.Previous&PageSize=@Model.PageSize" class="btn btn-primary" role="button">
+          <i class="fa-solid fa-circle-left"></i>
         </a>
-        <a href="?PageNr=@Model.Next&PageSize=@Model.PageSize" class="btn btn-secondary" role="button">
-          <i class="fa-solid fa-forward-step"></i>
+        <a>&nbsp;&nbsp;Seite @Model.PageNr&nbsp;&nbsp;</a>
+        <a href="?PageNr=@Model.Next&PageSize=@Model.PageSize" class="btn btn-primary" role="button">
+          <i class="fa-solid fa-circle-right"></i>
         </a>
+      }
+      else
+      {
+        <a>keine Albstones gefunden <i class="fa-regular fa-face-sad-tear"></i></a>
       }
     </div>
   </div>
 </div>
+
+<br />
