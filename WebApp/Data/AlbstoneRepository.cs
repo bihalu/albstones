@@ -3,15 +3,19 @@ using Albstones.Models;
 using Bogus;
 using CoordinateSharp;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Albstones.WebApp.Data;
 
 public class AlbstoneRepository : IAlbstoneRepository
 {
+    private readonly ILogger<AlbstoneRepository> _logger;
+
     public readonly AlbstoneDbContext context;
 
-    public AlbstoneRepository(AlbstoneDbContext context)
+    public AlbstoneRepository(ILogger<AlbstoneRepository> logger, AlbstoneDbContext context)
     {
+        _logger = logger;
         this.context = context;
     }
 
@@ -33,12 +37,12 @@ public class AlbstoneRepository : IAlbstoneRepository
     public IEnumerable<Albstone> GetAlbstonesByLocation(double Latitude, double Longitude, int page, int pageSize, int radius = 1000)
     {
         List<Albstone> albstones = new();
-        Coordinate coordinate1 = new Coordinate(Latitude, Longitude);
+        Coordinate coordinateA = new Coordinate(Latitude, Longitude);
 
         foreach (var albstone in context.Albstones)
         {
-            Coordinate coordinate2 = new Coordinate(albstone.Latitude, albstone.Longitude);
-            Distance distance = new Distance(coordinate1, coordinate2);
+            Coordinate coordinateB = new Coordinate(albstone.Latitude, albstone.Longitude);
+            Distance distance = new Distance(coordinateA, coordinateB);
 
             if (distance.Meters < radius)
             {
@@ -64,6 +68,26 @@ public class AlbstoneRepository : IAlbstoneRepository
         context!.Database.EnsureDeleted();
         context.Database.EnsureCreated();
 
+        if (File.Exists("albstones.json"))
+        {
+            try
+            {
+                var json = File.ReadAllText("albstones.json");
+                var albstones = JsonConvert.DeserializeObject<List<Albstone>>(json);
+
+                context.Albstones.AddRange(albstones!);
+
+                context.SaveChanges();
+
+                return;
+            }
+            catch (Exception)
+            {
+                // Can't read albstones.json, fallback to fake data
+            }
+        }
+
+        // Use fake data
         foreach (var albstone in AlbstoneRepository.FakeData())
         {
             context.Albstones.Add(albstone);
@@ -78,6 +102,7 @@ public class AlbstoneRepository : IAlbstoneRepository
         var bytes = new Byte[(int)stream.Length];
         stream.Seek(0, SeekOrigin.Begin);
         stream.Read(bytes, 0, (int)stream.Length);
+
         return Convert.ToBase64String(bytes);
     }
 
