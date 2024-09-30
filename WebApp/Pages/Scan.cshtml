@@ -4,26 +4,96 @@
   ViewData["Title"] = "Scan";
 }
 
-<h1 id="0">@ViewData["Title"]</h1>
+<div class="row text-center">
+  <div class="col-sm-12">
+    <p>
+      Wenn Du einen Albstone mit QR Code gefunden hast, kannst Du ihn mit der Handy Kamera scannen.
+    </p>
+    <p>
+      Aber Vorsicht! nicht jeder Albstone ist ein Original. Es gibt viele Fälschungen.
+    </p>
+    <p>
+      Den Code des Albstones prüfst Du mit dem Zauberstab.
+    </p>
+  </div>
+</div>
 
-<!--https://github.com/scanapp-org/html5-qrcode-docs/blob/main/docs/intro.md-->
-<div id="reader"></div>
+<br />
+
+<div class="row">
+  <div class="col-sm-6 text-end">
+    <a onclick="StartScan()" href="#" class="btn btn-primary" role="button">
+      <i class="fa-solid fa-qrcode"></i>&nbsp;Start Scan
+    </a>
+  </div>
+  <div class="col-sm-6">
+    <a onclick="StopScan()" href="#" class="btn btn-primary" role="button">
+      <i class="fa-solid fa-ban"></i>&nbsp;Stop Scan
+    </a>
+  </div>
+</div>
+
+<br />
+
+<div class="row">
+  <form>
+    <p>
+      <div class="input-group">
+        <input type="text" asp-for="Code" class="form-control" placeholder="Albstone code" />
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="submit">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </button>
+        </div>
+      </div>
+    </p>
+  </form>
+</div>
+
+<br />
+
+<div class="row">
+  <!--https://github.com/scanapp-org/html5-qrcode-docs/blob/main/docs/intro.md-->
+  <div class="col-sm-12" id="reader">
+  </div>
+</div>
+
+<br />
+
+<div class="row text-center">
+  <div class="col-sm-12">
+    @if (Model.FoundAlbstone)
+    {
+      <p>Glückwunsch, Du hast tatsächlich einen Albstone gefunden</p>
+      <i class="fa-regular fa-gem"></i>
+    }
+  </div>
+</div>
 
 @section Scripts
 {
   <script type="text/javascript">
-    function onScanSuccess(decodedText, decodedResult) {
-      // handle the scanned code as you like, for example:
-      console.log(`Code matched = ${decodedText}`, decodedResult);
+
+    const html5QrCode = new Html5Qrcode("reader");
+
+    function StartScan() {
+      const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+        document.getElementById('Code').value = decodedText;
+        StopScan();
+      };
+
+      const config = { fps: 10, qrbox: { width: 500, height: 500 } };
+
+      html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback);
     }
 
-    function onScanFailure(error) {
-      // handle scan failure, usually better to ignore and keep scanning.
-      // for example:
-      console.warn(`Code scan error = ${error}`);
+    function StopScan() {
+      html5QrCode.stop().then((ignore) => {
+        // QR Code scanning is stopped.
+      }).catch((err) => {
+        // Stop failed, handle it.
+      });
     }
 
-    let html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: { width: 250, height: 250 } }, /* verbose= */ false);
-    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
   </script>
 }
