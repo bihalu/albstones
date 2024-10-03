@@ -33,6 +33,6 @@ jobs:
         file: WebApp/Dockerfile
         push: true
         build-args: |
-          "VERSION=${{ VERSION }}"
-          "ASSEMBLY_VERSION=${{ ASSEMBLY_VERSION }}"
+          "VERSION=${{ env.VERSION }}"
+          "ASSEMBLY_VERSION=${{ env.ASSEMBLY_VERSION }}"
         tags: registry-service.docker-registry.svc.cluster.local:5000/albstones:${{ env.TAG }}
