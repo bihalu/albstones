@@ -39,6 +39,7 @@ public class AlbstoneController : ControllerBase
 
     // GET api/albstones/search?Page=1&PageSize=9
     [HttpGet("{search}")]
+    [DisableRequestSizeLimit]
     public IActionResult Get(string search, [FromQuery] PageQueryParameter queryParameter)
     {
         if (!ModelState.IsValid)
