@@ -21,15 +21,16 @@
 <br />
 
 <div class="row">
-  <div class="col-sm-6 text-end">
-    <a onclick="StartScan()" href="#" class="btn btn-primary" role="button">
-      <i class="fa-solid fa-qrcode"></i>&nbsp;Start Scan
-    </a>
-  </div>
-  <div class="col-sm-6">
-    <a onclick="StopScan()" href="#" class="btn btn-primary" role="button">
-      <i class="fa-solid fa-ban"></i>&nbsp;Stop Scan
-    </a>
+  <div class="col-sm-12">
+    <div class="text-center">
+      <a onclick="StartScan()" href="#" class="btn btn-primary" role="button">
+        <i class="fa-solid fa-qrcode"></i>&nbsp;Start Scan
+      </a>
+      <a>&nbsp;&nbsp;</a>
+      <a onclick="StopScan()" href="#" class="btn btn-primary" role="button">
+        <i class="fa-solid fa-ban"></i>&nbsp;Stop Scan
+      </a>
+    </div>
   </div>
 </div>
 
@@ -60,13 +61,27 @@
 
 <br />
 
-<div class="row text-center">
+<div class="row">
   <div class="col-sm-12">
-    @if (Model.FoundAlbstone)
-    {
-      <p>Glückwunsch, Du hast tatsächlich einen Albstone gefunden</p>
-      <i class="fa-regular fa-gem"></i>
-    }
+    <div class="text-center">
+      @if (Model.FoundAlbstone)
+      {
+        <p>Glückwunsch, Du hast tatsächlich einen Albstone gefunden</p>
+        <a href="#" class="btn btn-primary" role="button">
+          <i class="fa-solid fa-gem"></i>
+        </a>
+      }
+      else
+      {
+        if (!string.IsNullOrEmpty(Model.Code))
+        {
+          <p>Das ist leider kein echter Albstone, gib nicht auf</p>
+          <a href="#" class="btn btn-primary" role="button">
+            <i class="fa-solid fa-poo"></i>
+          </a>
+        }
+      }
+    </div>
   </div>
 </div>
 

@@ -27,10 +27,10 @@ public class ScanModel : PageModel
         {
             var json = new StringContent($"{{ \"Scan\": \"{Code}\" }}", Encoding.UTF8, "application/json");
 
-            var baseUri = $"{Request.Scheme}://{Request.Host}";
+            var baseUrl = System.Environment.GetEnvironmentVariable("BASE_URL") ?? $"{Request.Scheme}://{Request.Host}";
 
             using var httpClient = new HttpClient();
-            using var response = await httpClient.PostAsync($"{baseUri}/api/albstones", json);
+            using var response = await httpClient.PostAsync($"{baseUrl}/api/albstones", json);
             var apiResponse = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
