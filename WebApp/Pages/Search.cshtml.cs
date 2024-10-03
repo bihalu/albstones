@@ -1,6 +1,7 @@
 ﻿using Albstones.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using NBitcoin;
 using Newtonsoft.Json;
 
 namespace Albstones.WebApp.Pages;
@@ -35,10 +36,10 @@ public class SearchModel : PageModel
 
     public async Task<IActionResult> OnGetAsync()
     {
-        var baseUri = $"{Request.Scheme}://{Request.Host}";
+        var baseUrl = System.Environment.GetEnvironmentVariable("BASE_URL") ?? $"{Request.Scheme}://{Request.Host}";
 
         using var httpClient = new HttpClient();
-        using var response = await httpClient.GetAsync($"{baseUri}/api/albstones/{Item}?Page={PageNr}&PageSize={PageSize}");
+        using var response = await httpClient.GetAsync($"{baseUrl}/api/albstones/{Item}?Page={PageNr}&PageSize={PageSize}");
         var apiResponse = await response.Content.ReadAsStringAsync();
 #pragma warning disable CS8601 // Mögliche Nullverweiszuweisung.
         Albstones = JsonConvert.DeserializeObject<List<Albstone>>(apiResponse);
