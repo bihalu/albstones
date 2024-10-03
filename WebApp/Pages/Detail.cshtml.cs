@@ -26,10 +26,10 @@ public class DetailModel : PageModel
 
     public async Task<IActionResult> OnGetAsync()
     {
-        var baseUri = $"{Request.Scheme}://{Request.Host}";
+        var baseUrl = System.Environment.GetEnvironmentVariable("BASE_URL") ?? $"{Request.Scheme}://{Request.Host}";
 
         using var httpClient = new HttpClient();
-        using var response = await httpClient.GetAsync($"{baseUri}/api/albstones/{Item}?Page=1&PageSize=9");
+        using var response = await httpClient.GetAsync($"{baseUrl}/api/albstones/{Item}?Page=1&PageSize=9");
         var apiResponse = await response.Content.ReadAsStringAsync();
         Albstones = JsonConvert.DeserializeObject<List<Albstone>>(apiResponse)!;
 
