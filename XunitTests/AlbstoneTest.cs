@@ -1,7 +1,5 @@
 ﻿using Albstones.Helper;
 using Albstones.Models;
-using Albstones.WebApp.Data;
-using Bogus;
 using CoordinateSharp;
 using Serilog;
 using Xunit.Abstractions;
@@ -132,26 +130,15 @@ public class AlbstoneTest
     }
 
     [Fact]
-    public void AlbstoneFaker()
+    public void AlbstoneFakeData()
     {
         // Arrange
         var albstone0 = File.ReadAllText("Testdata/albstone0.json");
         var albstone1 = File.ReadAllText("Testdata/albstone1.json");
         var albstone2 = File.ReadAllText("Testdata/albstone2.json");
 
-        Randomizer.Seed = new Random(420);
-        var millenium = new DateTime(2000, 1, 1, 0, 0, 0);
-
         // Act
-        var albstoneFaker = new Faker<Albstone>("de")
-            .RuleFor(a => a.Name, f => f.Name.FirstName(f.Person.Gender))
-            .RuleFor(a => a.Date, f => f.Date.Future(20, millenium))
-            .RuleFor(a => a.Latitude, f => f.Address.Latitude())
-            .RuleFor(a => a.Longitude, f => f.Address.Longitude())
-            .RuleFor(a => a.Message, f => f.Hacker.Phrase())
-            .RuleFor(a => a.Image, AlbstoneRepository.DefaultImage);
-
-        var albstones = albstoneFaker.Generate(3);
+        var albstones = Albstone.FakeData(3);
 
         foreach (var albstone in albstones)
         {

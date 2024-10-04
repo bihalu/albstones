@@ -1,6 +1,4 @@
-﻿using Albstones.Helper;
-using Albstones.Models;
-using Bogus;
+﻿using Albstones.Models;
 using CoordinateSharp;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -88,47 +86,11 @@ public class AlbstoneRepository : IAlbstoneRepository
         }
 
         // Use fake data
-        foreach (var albstone in AlbstoneRepository.FakeData())
+        foreach (var albstone in Albstone.FakeData())
         {
             context.Albstones.Add(albstone);
         }
 
         context.SaveChanges();
-    }
-
-    public static string DefaultImage()
-    {
-        using var stream = typeof(Program).Assembly.GetManifestResourceStream("Albstones.WebApp.wwwroot.default.png")!;
-        var bytes = new Byte[(int)stream.Length];
-        stream.Seek(0, SeekOrigin.Begin);
-        stream.Read(bytes, 0, (int)stream.Length);
-
-        return Convert.ToBase64String(bytes);
-    }
-
-    private static List<Albstone> FakeData()
-    {
-        Randomizer.Seed = new Random(420);
-        DateTime millenium = new DateTime(2000, 1, 1, 0, 0, 0);
-
-        var albstoneFaker = new Faker<Albstone>("de")
-            .RuleFor(a => a.Name, f => f.Name.FirstName(f.Person.Gender))
-            .RuleFor(a => a.Date, f => f.Date.Future(20, millenium))
-            .RuleFor(a => a.Latitude, f => f.Address.Latitude())
-            .RuleFor(a => a.Longitude, f => f.Address.Longitude())
-            .RuleFor(a => a.Message, f => f.Hacker.Phrase())
-            .RuleFor(a => a.Image, DefaultImage());
-
-        var albstones = albstoneFaker.Generate(99); // generate 99 albstones
-
-        foreach (var albstone in albstones)
-        {
-            Coordinate coordinate = new Coordinate(albstone.Latitude, albstone.Longitude, albstone.Date);
-            string[] mnemonic = Magic.Mnemonic(albstone.Name, coordinate);
-            string seed = Magic.SeedHex(mnemonic);
-            albstone.Address = Magic.Address(seed, 0);
-        }
-
-        return albstones;
     }
 }
