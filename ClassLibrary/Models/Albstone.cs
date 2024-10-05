@@ -10,19 +10,19 @@ namespace Albstones.Models;
 [PrimaryKey(nameof(Address), nameof(Date))]
 public class Albstone
 {
-    public required string Address { get; set; }
+    public string? Address { get; set; }
 
     public DateTime Date { get; set; }
 
-    public required string Name { get; set; }
+    public string? Name { get; set; }
 
     public double Latitude { get; set; }
 
     public double Longitude { get; set; }
 
-    public required string Message { get; set; }
+    public string? Message { get; set; }
 
-    public required string Image { get; set; }
+    public string? Image { get; set; }
 
     private static CultureInfo _en_US = new CultureInfo("en-US");
 
@@ -84,7 +84,7 @@ public class Albstone
         foreach (var albstone in albstones)
         {
             Coordinate coordinate = new Coordinate(albstone.Latitude, albstone.Longitude, albstone.Date);
-            string[] mnemonic = Magic.Mnemonic(albstone.Name, coordinate);
+            string[] mnemonic = Magic.Mnemonic(albstone.Name!, coordinate);
             string seed = Magic.SeedHex(mnemonic);
             albstone.Address = Magic.Address(seed, 0);
         }
