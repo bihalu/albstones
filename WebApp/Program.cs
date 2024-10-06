@@ -1,6 +1,7 @@
 ﻿using Albstones.WebApp.Data;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace Albstones.WebApp;
 
@@ -8,22 +9,38 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        // in memory sqlite database
-        var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddRazorPages();
-        builder.Services.AddDbContext<AlbstoneDbContext>(d => d.UseSqlite(connection));
-        builder.Services.AddTransient<AlbstoneRepository>();
+
+        var configuration = builder.Configuration;
+        string database = configuration.GetValue<string>("DATABASE") ?? "Sqlite";
+
+        switch (database)
+        {
+            case "Sqlite":
+                var sqliteConnection = new SqliteConnection(configuration.GetConnectionString("AlbstoneDatabase" + database));
+                builder.Services.AddDbContext<AlbstoneDbContext>(d => d.UseSqlite(sqliteConnection));
+                break;
+
+            case "Postgres":
+                var postgresConnection = new NpgsqlConnection(configuration.GetConnectionString("AlbstoneDatabase" + database));
+                builder.Services.AddDbContext<AlbstoneDbContext>(d => d.UseNpgsql(postgresConnection));
+                break;
+
+            default:
+                break;
+        }
+
+        builder.Services.AddScoped<AlbstoneRepository>();
 
         var app = builder.Build();
 
-        AlbstoneRepository.AddAlbstoneData(app);
+        // Initialize database
+        AlbstoneRepository.InitializeAlbstoneDatabase(app);
 
         if (app.Environment.IsDevelopment())
         {

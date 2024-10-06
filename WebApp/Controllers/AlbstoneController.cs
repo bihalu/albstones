@@ -15,14 +15,14 @@ namespace Albstones.WebApp.Controllers;
 [ApiController]
 public class AlbstoneController : ControllerBase
 {
-    private readonly AlbstoneRepository Repository;
+    private readonly AlbstoneRepository _repository;
 
-    private readonly IConfiguration Configuration;
+    private readonly IConfiguration _config;
 
-    public AlbstoneController(AlbstoneRepository repository, IConfiguration configuration)
+    public AlbstoneController(AlbstoneRepository repository, IConfiguration config)
     {
-        Repository = repository;
-        Configuration = configuration;
+        _repository = repository;
+        _config = config;
     }
 
     // GET: api/albstones?Page=1&PageSize=9
@@ -34,7 +34,7 @@ public class AlbstoneController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        return Ok(Repository.GetAlbstones(queryParameter.Page, queryParameter.PageSize));
+        return Ok(_repository.GetAlbstones(queryParameter.Page, queryParameter.PageSize));
     }
 
     // GET api/albstones/search?Page=1&PageSize=9
@@ -58,17 +58,17 @@ public class AlbstoneController : ControllerBase
         // search by address
         if (search.StartsWith("bc1"))
         {
-            return Ok(Repository.GetAlbstonesByAddress(search, queryParameter.Page, queryParameter.PageSize));
+            return Ok(_repository.GetAlbstonesByAddress(search, queryParameter.Page, queryParameter.PageSize));
         }
 
         // search by location
         if (Coordinate.TryParse(search, out Coordinate coordinate))
         {
-            return Ok(Repository.GetAlbstonesByLocation(coordinate.Latitude.ToDouble(), coordinate.Longitude.ToDouble(), queryParameter.Page, queryParameter.PageSize));
+            return Ok(_repository.GetAlbstonesByLocation(coordinate.Latitude.ToDouble(), coordinate.Longitude.ToDouble(), queryParameter.Page, queryParameter.PageSize));
         }
 
         // search by name
-        return Ok(Repository.GetAlbstonesByName(search, queryParameter.Page, queryParameter.PageSize));
+        return Ok(_repository.GetAlbstonesByName(search, queryParameter.Page, queryParameter.PageSize));
     }
 
     // POST api/albstones
@@ -95,7 +95,7 @@ public class AlbstoneController : ControllerBase
             return BadRequest(exception.Message);
         }
 
-        var albstones = Repository.GetAlbstonesByAddress(address, 1, 1);
+        var albstones = _repository.GetAlbstonesByAddress(address, 1, 1);
 
         if (albstones == null || albstones.Count() != 1)
         {
@@ -109,7 +109,7 @@ public class AlbstoneController : ControllerBase
     private string GetToken(string address)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(Configuration["Secret"]!);
+        var key = Encoding.ASCII.GetBytes(_config["Secret"]!);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] { new Claim("address", address) }),
