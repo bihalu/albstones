@@ -17,7 +17,7 @@ public class Program
         builder.Services.AddRazorPages();
 
         var configuration = builder.Configuration;
-        string database = configuration.GetValue<string>("DATABASE") ?? "Sqlite";
+        string database = configuration.GetValue<string>("Database") ?? "Sqlite";
 
         switch (database)
         {

@@ -1,7 +1,6 @@
 ﻿using Albstones.Models;
 using CoordinateSharp;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace Albstones.WebApp.Data;
@@ -34,26 +33,42 @@ public class AlbstoneRepository : IAlbstoneRepository
     {
         _logger.LogInformation("GetAlbstones Page={page} PageSize={pageSize}", page, pageSize);
 
-        string database = _config.GetValue<string>("DATABASE") ?? "Sqlite";
-
-        IQueryable<Albstone> query;
-
-        switch (database)
+        var query = _context.Albstones.Join(
+            _context.Albstones
+            .GroupBy(a => a.Address)
+            .Select(g => new
+            {
+                Address = g.Key,
+                MinDate = g.Min(a => a.Date),
+            }),
+            a => a.Address,
+            b => b.Address,
+            (a, b) => new
+            {
+                a.Address,
+                a.Date,
+                a.Name,
+                a.Latitude,
+                a.Longitude,
+                a.Message,
+                a.Image,
+                FirstAddress = b.Address,
+                b.MinDate,
+            }
+        )
+        .Where(x => x.Date == x.MinDate && x.Address == x.FirstAddress)
+        .Select(y => new Albstone()
         {
-            case "Sqlite":
-                query = _context.Albstones.FromSql($"SELECT Address, Name, MIN(Date) AS Date, Latitude, Longitude, Message, Image FROM Albstones GROUP BY Address, Name, Latitude, Longitude, Message, Image HAVING Date = MIN(Date)");
-                break;
+            Address = y.Address,
+            Date = y.Date,
+            Name = y.Name,
+            Latitude = y.Latitude,
+            Longitude = y.Longitude,
+            Message = y.Message,
+            Image = y.Image,
+        });
 
-            case "Postgres":
-                query = _context.Albstones.FromSql($"SELECT a.\"Address\", a.\"Name\", a.\"Date\", a.\"Latitude\", a.\"Longitude\", a.\"Message\", a.\"Image\" FROM public.\"Albstones\" a JOIN(SELECT \"Address\", MIN(\"Date\") AS \"MinDate\" FROM public.\"Albstones\" GROUP BY \"Address\") AS j ON a.\"Address\" = j.\"Address\" AND a.\"Date\" = j.\"MinDate\"");
-                break;
-
-            default:
-                query = _context.Albstones;
-                break;
-        }
-
-        return query.Skip((page - 1) * pageSize).Take(pageSize);
+        return query.OrderBy(o => o.Address).Skip((page - 1) * pageSize).Take(pageSize);
     }
 
     public IEnumerable<Albstone> GetAlbstonesByLocation(double latitude, double longitude, int page, int pageSize, int radius = 1000)
@@ -74,7 +89,7 @@ public class AlbstoneRepository : IAlbstoneRepository
             }
         }
 
-        return albstones.Skip((page - 1) * pageSize).Take(pageSize);
+        return albstones.OrderBy(o => o.Address).Skip((page - 1) * pageSize).Take(pageSize);
     }
 
     public IEnumerable<Albstone> GetAlbstonesByName(string name, int page, int pageSize)
@@ -83,7 +98,7 @@ public class AlbstoneRepository : IAlbstoneRepository
 
         var query = _context.Albstones.Where(a => a.Name == name).OrderByDescending(s => s.Date);
 
-        return query.Skip((page - 1) * pageSize).Take(pageSize);
+        return query.OrderBy(o => o.Address).Skip((page - 1) * pageSize).Take(pageSize);
     }
 
     public static void InitializeAlbstoneDatabase(WebApplication app)
