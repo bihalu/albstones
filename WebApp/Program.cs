@@ -17,17 +17,17 @@ public class Program
         builder.Services.AddRazorPages();
 
         var configuration = builder.Configuration;
-        string database = configuration.GetValue<string>("Database") ?? "Sqlite";
+        string database = configuration.GetValue<string>("Database") ?? "Sqlite"; // Default database Sqlite
 
         switch (database)
         {
             case "Sqlite":
-                var sqliteConnection = new SqliteConnection(configuration.GetConnectionString("AlbstoneDatabase" + database));
+                var sqliteConnection = new SqliteConnection(configuration.GetConnectionString(database));
                 builder.Services.AddDbContext<AlbstoneDbContext>(d => d.UseSqlite(sqliteConnection));
                 break;
 
             case "Postgres":
-                var postgresConnection = new NpgsqlConnection(configuration.GetConnectionString("AlbstoneDatabase" + database));
+                var postgresConnection = new NpgsqlConnection(configuration.GetConnectionString(database));
                 builder.Services.AddDbContext<AlbstoneDbContext>(d => d.UseNpgsql(postgresConnection));
                 break;
 
@@ -39,8 +39,7 @@ public class Program
 
         var app = builder.Build();
 
-        // Initialize database
-        AlbstoneRepository.InitializeAlbstoneDatabase(app);
+        AlbstoneRepository.InitializeDatabase(app);
 
         if (app.Environment.IsDevelopment())
         {

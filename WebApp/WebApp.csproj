@@ -10,9 +10,6 @@
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Dockerfile" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Dockerfile">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -20,7 +17,6 @@
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
-    <EmbeddedResource Include="wwwroot\default.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj" />

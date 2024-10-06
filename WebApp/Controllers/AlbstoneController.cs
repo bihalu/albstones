@@ -15,14 +15,17 @@ namespace Albstones.WebApp.Controllers;
 [ApiController]
 public class AlbstoneController : ControllerBase
 {
-    private readonly AlbstoneRepository _repository;
+    private readonly ILogger<AlbstoneController> _logger;
 
     private readonly IConfiguration _config;
 
-    public AlbstoneController(AlbstoneRepository repository, IConfiguration config)
+    private readonly AlbstoneRepository _repository;
+
+    public AlbstoneController(ILogger<AlbstoneController> logger, IConfiguration config, AlbstoneRepository repository)
     {
-        _repository = repository;
+        _logger = logger;
         _config = config;
+        _repository = repository;
     }
 
     // GET: api/albstones?Page=1&PageSize=9

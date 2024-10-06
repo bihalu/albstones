@@ -9,24 +9,24 @@ public class AlbstoneRepository : IAlbstoneRepository
 {
     private readonly ILogger<AlbstoneRepository> _logger;
 
-    private readonly AlbstoneDbContext _context;
-
     private readonly IConfiguration _config;
 
-    public AlbstoneRepository(ILogger<AlbstoneRepository> logger, AlbstoneDbContext context, IConfiguration config)
+    private readonly AlbstoneDbContext _context;
+
+    public AlbstoneRepository(ILogger<AlbstoneRepository> logger, IConfiguration config, AlbstoneDbContext context)
     {
         _logger = logger;
-        _context = context;
         _config = config;
+        _context = context;
     }
 
     public IEnumerable<Albstone> GetAlbstonesByAddress(string address, int page, int pageSize)
     {
         _logger.LogInformation("GetAlbstonesByAddress Address={address} Page={page} PageSize={pageSize}", address, page, pageSize);
 
-        var query = _context.Albstones.Where(a => a.Address == address).OrderByDescending(s => s.Date);
+        var query = _context.Albstones.Where(a => a.Address == address);
 
-        return query.Skip((page - 1) * pageSize).Take(pageSize);
+        return query.OrderByDescending(a => a.Date).Skip((page - 1) * pageSize).Take(pageSize);
     }
 
     public IEnumerable<Albstone> GetAlbstones(int page, int pageSize)
@@ -36,10 +36,10 @@ public class AlbstoneRepository : IAlbstoneRepository
         var query = _context.Albstones.Join(
             _context.Albstones
             .GroupBy(a => a.Address)
-            .Select(g => new
+            .Select(a => new
             {
-                Address = g.Key,
-                MinDate = g.Min(a => a.Date),
+                Address = a.Key,
+                MinDate = a.Min(a => a.Date),
             }),
             a => a.Address,
             b => b.Address,
@@ -56,19 +56,19 @@ public class AlbstoneRepository : IAlbstoneRepository
                 b.MinDate,
             }
         )
-        .Where(x => x.Date == x.MinDate && x.Address == x.FirstAddress)
-        .Select(y => new Albstone()
+        .Where(a => a.Date == a.MinDate && a.Address == a.FirstAddress)
+        .Select(a => new Albstone()
         {
-            Address = y.Address,
-            Date = y.Date,
-            Name = y.Name,
-            Latitude = y.Latitude,
-            Longitude = y.Longitude,
-            Message = y.Message,
-            Image = y.Image,
+            Address = a.Address,
+            Date = a.Date,
+            Name = a.Name,
+            Latitude = a.Latitude,
+            Longitude = a.Longitude,
+            Message = a.Message,
+            Image = a.Image,
         });
 
-        return query.OrderBy(o => o.Address).Skip((page - 1) * pageSize).Take(pageSize);
+        return query.OrderBy(a => a.Address).Skip((page - 1) * pageSize).Take(pageSize);
     }
 
     public IEnumerable<Albstone> GetAlbstonesByLocation(double latitude, double longitude, int page, int pageSize, int radius = 1000)
@@ -89,19 +89,19 @@ public class AlbstoneRepository : IAlbstoneRepository
             }
         }
 
-        return albstones.OrderBy(o => o.Address).Skip((page - 1) * pageSize).Take(pageSize);
+        return albstones.OrderBy(a => a.Address).Skip((page - 1) * pageSize).Take(pageSize);
     }
 
     public IEnumerable<Albstone> GetAlbstonesByName(string name, int page, int pageSize)
     {
         _logger.LogInformation("GetAlbstonesByName Name={name} Page={page} PageSize={pageSize}", name, page, pageSize);
 
-        var query = _context.Albstones.Where(a => a.Name == name).OrderByDescending(s => s.Date);
+        var query = _context.Albstones.Where(a => a.Name == name);
 
-        return query.OrderBy(o => o.Address).Skip((page - 1) * pageSize).Take(pageSize);
+        return query.OrderByDescending(a => a.Date).Skip((page - 1) * pageSize).Take(pageSize);
     }
 
-    public static void InitializeAlbstoneDatabase(WebApplication app)
+    public static void InitializeDatabase(WebApplication app)
     {
         var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetService<AlbstoneDbContext>();

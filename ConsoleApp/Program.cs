@@ -141,7 +141,7 @@ internal class Program
 
         string image;
 
-        // image already in base64
+        // Image already in base64
         if (IsBase64String(imagePath))
         {
             image = imagePath;
