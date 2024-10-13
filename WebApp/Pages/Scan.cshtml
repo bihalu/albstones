@@ -93,7 +93,9 @@
 
     function StartScan() {
       const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-        document.getElementById('Code').value = decodedText;
+        var url = new URL(decodedText);
+        var code = url.searchParams.get('Code');
+        document.getElementById('Code').value = code
         StopScan();
       };
 

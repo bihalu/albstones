@@ -2,6 +2,7 @@
 using Albstones.Models;
 using CoordinateSharp;
 using ExcelDataReader;
+using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
 using QRCoder;
 using System.Web;
@@ -12,6 +13,20 @@ public class Program
 {
     static int Main(string[] args)
     {
+        // .secret file name
+        string secretPath = ".secret.txt";
+        string secret = "THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING";
+
+        if (!File.Exists(secretPath))
+        {
+            Console.WriteLine("Can't open file " + secretPath);
+            Console.WriteLine("Use default secret");
+        }
+        else
+        {
+            secret = File.ReadAllText(secretPath);
+        }
+
         // Excel file name
         string filePath = "albstones.xlsx";
 
@@ -26,11 +41,11 @@ public class Program
         {
             Console.WriteLine("Can't open file " + filePath);
             Console.WriteLine("Create Fake Albstones");
-            albstones = AlbstonesFromFakeData();
+            albstones = AlbstonesFromFakeData(secret);
         }
         else
         {
-            albstones = AlbstonesFromExcel(filePath);
+            albstones = AlbstonesFromExcel(secret, filePath);
         }
 
         // Write albstones.json
@@ -39,7 +54,7 @@ public class Program
         return 0;
     }
 
-    private static List<Albstone> AlbstonesFromFakeData()
+    private static List<Albstone> AlbstonesFromFakeData(string secret)
     {
         List<Albstone> albstones = [];
 
@@ -50,7 +65,7 @@ public class Program
             Coordinate coordinate = new Coordinate(item.Latitude, item.Longitude, item.Date);
             string[] mnemonic = Magic.Mnemonic(item.Name!, coordinate);
 
-            var albstone = CreateAlbstone(mnemonic, item.Address!, item.Name!, item.Message!, item.Image!, item.Date, item.Latitude, item.Longitude, out bool isValid);
+            var albstone = CreateAlbstone(secret, mnemonic, item.Address!, item.Name!, item.Message!, item.Image!, item.Date, item.Latitude, item.Longitude, out bool isValid);
             if (isValid)
             {
                 albstones.Add(albstone);
@@ -60,7 +75,7 @@ public class Program
         return albstones;
     }
 
-    private static List<Albstone> AlbstonesFromExcel(string filePath)
+    private static List<Albstone> AlbstonesFromExcel(string secret, string filePath)
     {
         List<Albstone> albstones = [];
 
@@ -104,7 +119,7 @@ public class Program
                     continue;
                 }
 
-                var albstone = CreateAlbstone(word, address, name, message, imagePath, date, latitude, longitude, out bool isValid);
+                var albstone = CreateAlbstone(secret, word, address, name, message, imagePath, date, latitude, longitude, out bool isValid);
 
                 if (isValid)
                 {
@@ -117,7 +132,7 @@ public class Program
         return albstones;
     }
 
-    private static Albstone CreateAlbstone(string[] word, string address, string name, string message, string imagePath, DateTime date, double latitude, double longitude, out bool isValid)
+    private static Albstone CreateAlbstone(string secret, string[] word, string address, string name, string message, string imagePath, DateTime date, double latitude, double longitude, out bool isValid)
     {
         var albstone = new Albstone();
         isValid = false;
@@ -173,31 +188,14 @@ public class Program
         albstone.Image = image;
         isValid = true;
 
-        string secretPath = ".secret.txt";
-        string secret = "THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING";
-
-        if (!File.Exists(secretPath))
-        {
-            Console.WriteLine("Can't open file " + secretPath);
-            Console.WriteLine("Use default secret");
-        }
-        else
-        {
-            secret = File.ReadAllText(secretPath);
-        }
-
         // Generate Scan URL
         var initializationVector = secret[..16].ToBytes(16);
         var key = secret[16..].ToBytes(32);
         string words = string.Join(' ', word);
 
         byte[] encryptedCode = AesEncryption.Encrypt(words.ToBytes(), key, initializationVector);
-
-        string base64Encoded = Convert.ToBase64String(encryptedCode);
-
-        string urlEncoded = HttpUtility.UrlEncode(base64Encoded);
-
-        var scanUrl = "https://albstones.de/Scan?Code=" + urlEncoded;
+        string base64UrlEncoded = WebEncoders.Base64UrlEncode(encryptedCode);
+        var scanUrl = "https://albstones.de/Scan?Code=" + base64UrlEncoded;
 
         Console.WriteLine("Scan URL for albstone " + name + " -> " + scanUrl);
 

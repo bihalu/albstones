@@ -8,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Web;
 
 namespace Albstones.WebApp.Controllers;
 
@@ -77,7 +76,7 @@ public class AlbstoneController : ControllerBase
 
     // POST api/albstones
     // {
-    //   "Code": "VwWzby1Uirrgn6RLxdKRDBkCcZjkCr%2fGCfPvjS1SnLEzQ0JGtou40CR5rPe3cMI4oFYr2qhBetv%2fBwhWDYxuBUqrFeg8eVv6WPH1euFDUH4%3d"
+    //   "Code": "YtkOnw-uyTvF21jwlnLfPC_E_btiATm97aMT3tIfwhO-D_LGwsoetO4vkk3eAzq2i9MilaHmoolrrd-yI1k4hyDUKJPapUPoM5pF0lBKxRg"
     // }
     [HttpPost()]
     public IActionResult Post(ScanParameter scan)
@@ -96,9 +95,15 @@ public class AlbstoneController : ControllerBase
             var initializationVector = secret[..16].ToBytes(16);
             var key = secret[16..].ToBytes(32);
 
-            var base64 = HttpUtility.UrlDecode(scan.Code); // Url decode
-            var encryptedData = Convert.FromBase64String(base64); // Base64 decode
-            var decryptedData = AesEncryption.Decrypt(encryptedData, key, initializationVector); // Aes decrypt
+            string code = scan.Code.Replace('_', '/').Replace('-', '+');
+            switch (scan.Code.Length % 4)
+            {
+                case 2: code += "=="; break;
+                case 3: code += "="; break;
+            }
+
+            var encryptedData = Convert.FromBase64String(code);
+            var decryptedData = AesEncryption.Decrypt(encryptedData, key, initializationVector);
             var words = decryptedData.BytesToString();
             var word = words.Split(' ');
             var seed = Magic.SeedHex(word);
