@@ -25,7 +25,7 @@ public class ScanModel : PageModel
     {
         if (!string.IsNullOrEmpty(Code))
         {
-            var json = new StringContent($"{{ \"Scan\": \"{Code}\" }}", Encoding.UTF8, "application/json");
+            var json = new StringContent($"{{ \"Code\": \"{Code}\" }}", Encoding.UTF8, "application/json");
 
             var baseUrl = System.Environment.GetEnvironmentVariable("BASE_URL") ?? $"{Request.Scheme}://{Request.Host}";
 

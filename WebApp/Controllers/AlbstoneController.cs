@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Web;
 
 namespace Albstones.WebApp.Controllers;
 
@@ -76,7 +77,7 @@ public class AlbstoneController : ControllerBase
 
     // POST api/albstones
     // {
-    //   "Scan": "amFja2V0IG9hayBoYWJpdCBuYWl2ZSBuYWl2ZSB5YXJkIGFiYW5kb24gbGFiIGJhYnkgc2FkIHRhYmxlIG9mdGVu"
+    //   "Code": "VwWzby1Uirrgn6RLxdKRDBkCcZjkCr%2fGCfPvjS1SnLEzQ0JGtou40CR5rPe3cMI4oFYr2qhBetv%2fBwhWDYxuBUqrFeg8eVv6WPH1euFDUH4%3d"
     // }
     [HttpPost()]
     public IActionResult Post(ScanParameter scan)
@@ -90,7 +91,17 @@ public class AlbstoneController : ControllerBase
 
         try
         {
-            var seed = Magic.SeedHex(scan.GetWords());
+            // Decode and decrypt code
+            var secret = _config["Secret"]!;
+            var initializationVector = secret[..16].ToBytes(16);
+            var key = secret[16..].ToBytes(32);
+
+            var base64 = HttpUtility.UrlDecode(scan.Code); // Url decode
+            var encryptedData = Convert.FromBase64String(base64); // Base64 decode
+            var decryptedData = AesEncryption.Decrypt(encryptedData, key, initializationVector); // Aes decrypt
+            var words = decryptedData.BytesToString();
+            var word = words.Split(' ');
+            var seed = Magic.SeedHex(word);
             address = Magic.Address(seed);
         }
         catch (Exception exception)
@@ -112,12 +123,12 @@ public class AlbstoneController : ControllerBase
     private string GetToken(string address)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_config["Secret"]!);
+        var secret = Encoding.ASCII.GetBytes(_config["Secret"]!);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] { new Claim("address", address) }),
             Expires = DateTime.UtcNow.AddMinutes(10),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256Signature)
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);

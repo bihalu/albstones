@@ -1,4 +1,5 @@
-﻿using Albstones.Helper;
+﻿using System.Security.Cryptography;
+using Albstones.Helper;
 using CoordinateSharp;
 
 namespace XunitTests;
@@ -101,5 +102,41 @@ public class MagicTest
 
         // Assert
         Assert.Equal("machine naive eager machine oak naive ice cabbage lab eager oak abuse", mnemonic);
+    }
+
+    [Fact]
+    public void AesEncryptionDecryption()
+    {
+        // Arrange
+        var message = "Hello world!";
+        var initializationVector = RandomNumberGenerator.GetBytes(16);
+        var key = RandomNumberGenerator.GetBytes(32);
+
+        // Act
+        var encryptedData = AesEncryption.Encrypt(message.ToBytes(), key, initializationVector);
+        var decryptedData = AesEncryption.Decrypt(encryptedData, key, initializationVector);
+
+        // Assert
+        Assert.Equal(message, decryptedData.BytesToString());
+    }
+
+    [Theory]
+    [InlineData("Hello world!", 0, "Hello world!")]
+    [InlineData("Hello world!", 4, "Hell")]
+    [InlineData("Hello world!", 8, "Hello wo")]
+    [InlineData("Hello world!", 16, "Hello world!    ")]
+    [InlineData("Hello world!", 32, "Hello world!                    ")]
+    public void StringToBytes(string message, int count, string expected)
+    {
+        // Arrange
+        int expectedCount = count > 0 ? count : message.Length;
+
+        // Act
+        var bytes = message.ToBytes(count);
+        var actual = bytes.BytesToString();
+
+        // Assert
+        Assert.Equal(expectedCount, actual.Length);
+        Assert.Equal(expected, actual);
     }
 }

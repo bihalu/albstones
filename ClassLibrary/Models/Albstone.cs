@@ -43,6 +43,7 @@ public class Albstone
         else
         {
             Thread.CurrentThread.CurrentCulture = _en_US;
+
             return GetCoordinate().ToString();
         }
     }
@@ -95,7 +96,7 @@ public class Albstone
     public static string DefaultImage()
     {
         using var stream = typeof(Albstone).Assembly.GetManifestResourceStream("Albstones.Images.default.png")!;
-        var bytes = new Byte[(int)stream.Length];
+        var bytes = new byte[(int)stream.Length];
         stream.Seek(0, SeekOrigin.Begin);
         stream.Read(bytes, 0, (int)stream.Length);
 

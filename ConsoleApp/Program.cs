@@ -4,10 +4,11 @@ using CoordinateSharp;
 using ExcelDataReader;
 using Newtonsoft.Json;
 using QRCoder;
+using System.Web;
 
 namespace Albstones.ConsoleApp;
 
-internal class Program
+public class Program
 {
     static int Main(string[] args)
     {
@@ -75,6 +76,7 @@ internal class Program
             for (int i = 1; i < sheet.Rows.Count; i++)
             {
                 string[] word = new string[12];
+
                 for (int j = 0; j < word.Length; j++)
                 {
                     word[j] = (string)sheet.Rows[i][j];
@@ -98,6 +100,7 @@ internal class Program
                 catch (Exception exception)
                 {
                     Console.WriteLine("Error reading Excel row " + i + ": " + exception.Message);
+
                     continue;
                 }
 
@@ -121,6 +124,7 @@ internal class Program
 
         // Derive address0 from words
         string address0;
+
         try
         {
             string seedHex = Magic.SeedHex(word);
@@ -152,6 +156,7 @@ internal class Program
             if (!File.Exists(imagePath))
             {
                 Console.WriteLine("Can't open image " + imagePath);
+
                 return albstone;
             }
 
@@ -168,16 +173,42 @@ internal class Program
         albstone.Image = image;
         isValid = true;
 
+        string secretPath = ".secret.txt";
+        string secret = "THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING";
+
+        if (!File.Exists(secretPath))
+        {
+            Console.WriteLine("Can't open file " + secretPath);
+            Console.WriteLine("Use default secret");
+        }
+        else
+        {
+            secret = File.ReadAllText(secretPath);
+        }
+
+        // Generate Scan URL
+        var initializationVector = secret[..16].ToBytes(16);
+        var key = secret[16..].ToBytes(32);
+        string words = string.Join(' ', word);
+
+        byte[] encryptedCode = AesEncryption.Encrypt(words.ToBytes(), key, initializationVector);
+
+        string base64Encoded = Convert.ToBase64String(encryptedCode);
+
+        string urlEncoded = HttpUtility.UrlEncode(base64Encoded);
+
+        var scanUrl = "https://albstones.de/Scan?Code=" + urlEncoded;
+
+        Console.WriteLine("Scan URL for albstone " + name + " -> " + scanUrl);
+
         Console.WriteLine("QRCode for albstone " + name);
 
-        var scanBytes = System.Text.Encoding.UTF8.GetBytes(string.Join(' ', word));
-        var scan = Convert.ToBase64String(scanBytes);
         var gen = new QRCodeGenerator();
-        var data = gen.CreateQrCode(scan, QRCodeGenerator.ECCLevel.H);
+        var data = gen.CreateQrCode(scanUrl, QRCodeGenerator.ECCLevel.H);
         var asciiCode = new AsciiQRCode(data).GetGraphicSmall(invert: false);
         Console.WriteLine(asciiCode);
 
-        var data2 = gen.CreateQrCode(scan, QRCodeGenerator.ECCLevel.H);
+        var data2 = gen.CreateQrCode(scanUrl, QRCodeGenerator.ECCLevel.H);
         var pngCode = new PngByteQRCode(data2).GetGraphic(5);
 
         File.WriteAllBytes(address + ".png", pngCode);
@@ -188,6 +219,7 @@ internal class Program
     private static bool IsBase64String(string base64)
     {
         Span<byte> buffer = new Span<byte>(new byte[base64.Length]);
+
         return Convert.TryFromBase64String(base64, buffer, out int bytesParsed);
     }
 }
