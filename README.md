@@ -1,6 +1,6 @@
 # Albstones
-Albstones sind bemalte Steine, die auf der Schwäbischen Alb "ausgewildert" werden.  
-Auf Facebook gibt es eine große Fangemeinde mit der man jeden Fund eines Albstones teilen kann.  
+Albstones sind bemalte Steine, die auf der Schwï¿½bischen Alb "ausgewildert" werden.  
+Auf Facebook gibt es eine groï¿½e Fangemeinde mit der man jeden Fund eines Albstones teilen kann.  
 Hierbei kann jeder mittmachen und es gibt nur ein paar Regeln:  
 
 * Finde einen passenden Stein in der Natur
@@ -8,60 +8,69 @@ Hierbei kann jeder mittmachen und es gibt nur ein paar Regeln:
 * Lege den Albstone wieder in der Natur aus
 * Freue Dich, wenn jemand Deinen Albstone findet
 * Wenn Du selbst einen Albstone findest, mache ein Foto, poste es auf Facebook in der Gruppe #albstones und lege den Albstone wieder woanders aus
-* Wenn der Albstone besonders für Dich ist, darfst Du ihn auch behalten ;-)
+* Wenn der Albstone besonders fï¿½r Dich ist, darfst Du ihn auch behalten ;-)
 
 # Wozu nun dieses Projekt?
-Wenn es doch schon eine große Albstones Community auf Facebook gibt wozu dient dann dieses Projekt.  
+Wenn es doch schon eine groï¿½e Albstones Community auf Facebook gibt wozu dient dann dieses Projekt.  
 
 ## "besondere" Albstones
 Die Idee ist, dass es "besondere" Albstones gibt.  
 Zu jedem besonderen Albstone gibt es eine Digitale Abbildung auf der Webseite [https://albstones.de](https://albstones.de)  
 
-Zusätzlich soll es noch eine Geschichte auf der Webseite geben die sich um diese besonderen Albstones dreht.  
+Zusï¿½tzlich soll es noch eine Geschichte auf der Webseite geben die sich um diese besonderen Albstones dreht.  
 
 ## Digitaler Albstone
-Die digitale Abbildung eines Albstones enthält folgende Informationen:  
+Die digitale Abbildung eines Albstones enthï¿½lt folgende Informationen:  
 
-* Addresse -> eindeutige Addresse abgeleitet über 12 Wörter nach dem BIP-39 und BIP-32 Verfahren
+* Addresse -> eindeutige Addresse abgeleitet ï¿½ber 12 Wï¿½rter nach dem BIP-39 und BIP-32 Verfahren
 * Datum -> Geburtsdatum bzw. Funddatum
 * Name -> Name des Albstones
-* Lokation (Längengrad, Breitengrad) -> Geburtsort bzw. letzter Fundort
-* Nachricht -> Kurzbeschreibung bzw. Lebenslauf des Albstones lyrisch ausgedrückt
+* Lokation (Lï¿½ngengrad, Breitengrad) -> Geburtsort bzw. letzter Fundort
+* Nachricht -> Kurzbeschreibung bzw. Lebenslauf des Albstones lyrisch ausgedrï¿½ckt
 * Bild -> Bild des Albstones
 
-Für jeden Albstone gibt es einen initialen Datensatz (Geburt) .
-Folgeeinträge entstehen, wenn jemand den Albstone findet und einscannt.  
-Das Einscannen ist fälschungssicher, da nur über die 12 Wörter der Stein eindeutig identifiziert werden kann.
+Fï¿½r jeden Albstone gibt es einen initialen Datensatz (Geburt) .
+Folgeeintrï¿½ge entstehen, wenn jemand den Albstone findet und einscannt.  
+Das Einscannen ist fï¿½lschungssicher, da nur ï¿½ber die 12 Wï¿½rter der Stein eindeutig identifiziert werden kann.
 
 ## Physischer Albstone
-Der physische Albstone hingegen enthält ein Identifizierungsmerkmal.  
-In diesem Fall sind das 12 Wörter, die als QR Code auf dem Stein angebracht sind.  
-Besser wäre ein RFID Chip, der in den Stein integriert ist.  
+Der physische Albstone hingegen enthï¿½lt ein Identifizierungsmerkmal.  
+In diesem Fall sind das 12 Wï¿½rter, die als QR Code auf dem Stein angebracht sind.  
+Besser wï¿½re ein RFID Chip, der in den Stein integriert ist.  
 
-Beide Methoden müssen noch getestet werden, da es schwierig ist einen QR Code auf einen Stein zu drucken.  
+Beide Methoden mï¿½ssen noch getestet werden, da es schwierig ist einen QR Code auf einen Stein zu drucken.  
 Auch der RFID Chip ist kompliziert, da ein Loch gebohrt werden muss.  
-Außerdem muss sichergestellt werden, dass die 12 Wörter z.B. mit dem Handy eingescannt werden können.
+Auï¿½erdem muss sichergestellt werden, dass die 12 Wï¿½rter z.B. mit dem Handy eingescannt werden kï¿½nnen.
 
-Und natürlich ist der Albstone künstlerisch bemalt ;-)
+Und natï¿½rlich ist der Albstone kï¿½nstlerisch bemalt ;-)
 
-## Mögliche Verwendung
-a) als Schatzsuche auf der schwäbischen Alb  
-Bei dieser Variante werden die Albstones weit auseinander auf der schwäbischen Alb ausgewildert.  
-Sie müssen sehr gut versteckt werden, da ggf. noch ein Anreiz über Bitcoins hinterlegt ist.  
-Die Lokation an der sie ausgewildert wurden wird natürlich nicht verraten.  
+## Mï¿½gliche Verwendung
+a) als Schatzsuche auf der schwï¿½bischen Alb  
+Bei dieser Variante werden die Albstones weit auseinander auf der schwï¿½bischen Alb ausgewildert.  
+Sie mï¿½ssen sehr gut versteckt werden, da ggf. noch ein Anreiz ï¿½ber Bitcoins hinterlegt ist.  
+Die Lokation an der sie ausgewildert wurden wird natï¿½rlich nicht verraten.  
 Man kann ja den Albstone im Umkreis von 5Km zum Geburtsort auslegen.  
 Somit besteht eine sehr geringe Chance den Stein zu finden.
 
-b) als Suchspiel auf einem begrenzten Gelände (Schnitzeljagd)   
+b) als Suchspiel auf einem begrenzten Gelï¿½nde (Schnitzeljagd)   
 Bei dieser Variante sind die Albstones genau an der Lokation "versteckt", die auch auf der Webseite steht.  
-Die Herausforderung ist den Stein über die Koordinaten (Längengrad, Breitengrad) zu finden und dann einen Scan durchzuführen.  
-Bei dem Scan kann man eine persönliche Nachricht hinterlegen. Der Stein bleibt jedoch an der Lokation.  
-Man kann dafür auch einen großen Stein wählen (> 100KG) auf dem der QR Code hinterlegt ist.  
+Die Herausforderung ist den Stein ï¿½ber die Koordinaten (Lï¿½ngengrad, Breitengrad) zu finden und dann einen Scan durchzufï¿½hren.  
+Bei dem Scan kann man eine persï¿½nliche Nachricht hinterlegen. Der Stein bleibt jedoch an der Lokation.  
+Man kann dafï¿½r auch einen groï¿½en Stein wï¿½hlen (> 100KG) auf dem der QR Code hinterlegt ist.  
 Somit ist sichergestellt, dass der Stein nicht bewegt wird.  
 
 ## Anreiz
-Um den Anreiz für die Suche nach den Albstones zu erhöhen kann auf die jeweilige Addresse des Albstones ein Bitcoin Betrag geschickt werden.  
+Um den Anreiz fï¿½r die Suche nach den Albstones zu erhï¿½hen kann auf die jeweilige Addresse des Albstones ein Bitcoin Betrag geschickt werden.  
 Damit kann man auf der Blockchain verifizieren, dass der Albstone noch nicht gefunden wurde.  
-Jemand mit dem technischen Wissen und dem Zugriff auf einen physischen Albstone könnte den Bitcoin Betrag einlösen bzw. transferieren.  
-Der Primäre Anreiz sollte jedoch sein, den Albstone zu finden und mit einem Eintrag auf der Webseite den Fund zu dokumentieren.
+Jemand mit dem technischen Wissen und dem Zugriff auf einen physischen Albstone kï¿½nnte den Bitcoin Betrag einlï¿½sen bzw. transferieren.  
+Der Primï¿½re Anreiz sollte jedoch sein, den Albstone zu finden und mit einem Eintrag auf der Webseite den Fund zu dokumentieren.
 
+# Container Image bauen
+
+```
+docker login -u bihalu docker.io
+
+docker build --build-arg VERSION=0.1.0 --build-arg ASSEMBLY_VERSION=0.1.0 -t docker.io/bihalu/albstones:0.1.0 -f WebApp/Dockerfile .
+
+docker push docker.io/bihalu/albstones:0.1.0
+```
